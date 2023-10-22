@@ -1,0 +1,303 @@
+\usepackage{wrapfig,amsthm}
+
+\usepackage{booktabs}   %% For formal tables:
+                        %% http://ctan.org/pkg/booktabs
+\usepackage{subcaption} %% For complex figures with subfigures/subcaptions
+                        %% http://ctan.org/pkg/subcaption
+
+\usepackage{titlesec,balance}
+
+\usepackage{eufrak}
+%\usepackage{unicode-math}
+\usepackage{mathrsfs}
+
+\setcounter{secnumdepth}{4}
+%\renewcommand{\theparagraph}{\textit{(\alph{paragraph})}}
+%\renewcommand{\theparagraph}{\arabic{paragraph}}
+\titleformat{\paragraph}[runin]
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{1.5ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\usepackage{mdframed}
+
+% package area
+\usepackage[T1]{fontenc}
+\usepackage{extarrows}
+\usepackage{xspace,enumitem}
+\usepackage{cleveref}
+\usepackage{listings}
+\usepackage{adjustbox}
+\usepackage{multirow}
+\usepackage{marvosym}
+\let\Cross\relax
+\usepackage{bbding}
+\usepackage{color}
+\usepackage{colortbl}
+\usepackage{relsize}
+\usepackage{xifthen}% provides \ifthenelse and \isempty
+\usepackage{tikz}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{automata, positioning, arrows}
+\usetikzlibrary{tikzmark,calc}
+\tikzset{
+->, % makes the edges directed
+>=latex, % makes the arrow heads bold
+node distance=3cm, % specifies the minimum distance between two nodes. Change if necessary.
+every state/.style={thick, fill=red!10}, % sets the properties for each ’state’ node
+%initial text=$ $, % sets the text that appears on the start arrow
+auto,
+}
+
+\usetikzlibrary{calc,decorations.pathmorphing,shapes}
+
+\newcounter{sarrow}
+\newcommand\xrsquigarrow[1]{%
+\stepcounter{sarrow}%
+\mathrel{\begin{tikzpicture}[baseline= {( $ (current bounding box.south) + (0,-0.5ex) $ )}]
+\node[inner sep=.5ex] (\thesarrow) {$\scriptstyle #1$};
+\path[draw,<-,decorate,
+  decoration={zigzag,amplitude=0.7pt,segment length=1.2mm,pre=lineto,pre length=4pt}] 
+    (\thesarrow.south east) -- (\thesarrow.south west);
+\end{tikzpicture}}%
+}
+
+%lstlisting settings
+\lstset{%
+  % backgroundcolor=\color{white},
+  language=java, 
+  basicstyle=\small\ttfamily,
+  keywordstyle=\sffamily\bfseries,
+  captionpos=none,
+  columns=flexible,
+  keepspaces=true,
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
+  escapeinside={(*}{*)},
+  literate={lam}{{$\lambda$}}1 {->}{{$\rightarrow$}}1 {Top}{{$\top$}}1 {o+o}{{$\oplus$}}1 {=>}{{$\Rightarrow$}}1 {/\\}{{$\Lambda$}}1 {forall}{{$\forall$}}1,
+  tabsize=2,
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  sensitive=false,
+  aboveskip=2pt,
+  belowskip=2pt,
+  numbers=left, 
+  numbersep=4pt
+}
+
+\lstdefinelanguage{java}{
+  keywords={int, String, Boolean, static, void, class, extends, this, new, if, then, else, return, Object},
+  identifierstyle=\color{black},
+  morecomment=[l]{--},
+  morecomment=[l]{//},
+  morestring=[b]",
+  xleftmargin  = 3mm,
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  mathescape=true,
+  escapeinside={<@}{@>},
+}
+\def\inline{\lstinline[basicstyle=\ttfamily]}
+
+\renewcommand{\dbltopfraction}{0.9}
+
+% color
+\definecolor{carnelian}{rgb}{0.7, 0.11, 0.11}
+\newcommand{\ptsrulecolor}{black}
+
+ \newtheorem{defn}{Definition}
+ \newtheorem{thm}{Theorem}
+  \newtheorem{lem}{Lemma}
+ \newtheorem{corollary}{Corollary} 
+
+ \makeatletter 
+\renewcommand{\boxed}[1]{\text{\fboxsep=.1em\fbox{\m@th$\displaystyle#1$}}}
+% %% rule command
+\newcommand{\ruledef}[2]{$\dfrac{\begin{array}[c]{c}#1\end{array}}{\begin{array}[c]{c}#2\end{array}}$}
+% \newcommand{\rulename}[1]{\relsize{0}{\color{\ptsrulecolor} \fontfamily{cmss} \selectfont [\textsc{#1}]}}
+\newcommand{\rulename}[1]{\relsize{0}{\color{\ptsrulecolor} [\textsf{\textsc{#1}]}}}
+\newcommand{\rulespace}{\quad}
+
+\newcommand{\hl}[1]{\xspace{\color{black} #1}}
+
+\newcommand{\lookup}{\texttt{dispatch}}
+\newcommand{\methodctx}{\texttt{MethodCtx}}
+\newcommand{\methodof}{\texttt{MethodOf}}
+\newcommand\mdoubleplus{\mathbin{::}}
+% shorthand commands
+\newcommand{\scissor}{\raisebox{-.5ex}{\textcolor{red}{\ScissorLeft}\xspace}}
+\newcommand{\tool}{\textsc{P3Ctx}\xspace}
+
+%\renewcommand{\boxed}[1]{\text{\fboxsep=.2em\fbox{\m@th$\displaystyle#1$}}}
+
+\newcommand{\jchord}{\textsc{Jchord}\xspace}
+\newcommand{\qilin}{\textsc{Qilin}\xspace}
+\newcommand{\doop}{\textsc{Doop}\xspace}
+\newcommand{\soot}{\textsc{Soot}\xspace}
+\newcommand{\wala}{\textsc{Wala}\xspace}
+\newcommand{\spark}{\textsc{Spark}\xspace}
+\newcommand{\zipper}{\textsc{Zipper}\xspace}
+\newcommand{\selectx}{\textsc{Selectx}\xspace}
+\newcommand{\eagle}{\textsc{Eagle}\xspace}
+\newcommand{\turner}{\textsc{Turner}\xspace}
+\newcommand{\conch}{\textsc{Conch}\xspace}
+\newcommand{\IFDS}{IFDS\xspace}
+\newcommand{\kcs}[1]{\textsf{$#1$CFA}\xspace}
+\newcommand{\pkcs}[1]{\textsf{$P$-$#1$CFA}\xspace}
+\newcommand{\Akcs}[1]{\textsf{$A$-$#1$CFA}\xspace}
+\newcommand{\skcs}[1]{\textsf{$S$-$#1$CFA}\xspace}
+\newcommand{\zkcs}[1]{\textsf{$Z$-$#1$CFA}\xspace}
+% \newcommand{\lkcs}[1]{\textsf{$E^l$-$#1$CFA}\xspace}
+\newcommand{\onesteptran}{\rightarrowtail}
+\newcommand{\transitivetran}{\rightarrowtail^{+}}
+
+\newcommand{\bps}[1]{{\texttt{\MakeUppercase{#1}}}}
+\newcommand{\stmthl}[1]{\bps{#1}}
+
+\newcommand{\CC}{\textbf{C}}
+
+\newcommand{\emptyctx}{[\,]\xspace}
+\newcommand{\pointsto}{\texttt{PTS}}
+\newcommand{\cipointsto}[1]{\overline{\texttt{PTS}}(#1)}
+\newcommand{\cipointstonoarg}{\overline{\texttt{PTS}}}
+\newcommand{\csabstraction}[2]{\langle #1, #2\rangle}
+
+\newcommand{\selconOne}{\bps{CS-C1}\xspace}
+\newcommand{\selconTwo}{\bps{CS-C2}\xspace}
+\newcommand{\selconThree}{\bps{CS-C3}\xspace}
+\newcommand{\dispatchconOne}{\bps{DP-C1}\xspace}
+\newcommand{\dispatchconTwo}{\bps{DP-C2}\xspace}
+\newcommand{\propo}{\bps{Prop-O}\xspace}
+\newcommand{\propv}{\bps{Prop-V}\xspace}
+
+\newcommand{\commentfont}[1]{{\color{purple}\texttt{#1}}}
+\newcommand{\callsitefont}[1]{{\ttfamily #1}}
+
+\newcommand{\reg}[1]{\textsf{#1}\xspace}
+\newcommand{\invreg}[1]{\overline{\reg{#1}}\xspace}
+\newcommand{\addbra}[1]{\ifthenelse{\isempty{#1}}{}{[#1]}}
+
+
+\newcommand{\realizable}{\reg{realizable}}
+\newcommand{\exit}{\reg{ex}}
+\newcommand{\entry}{\reg{en}}
+\newcommand{\gramexit}{\reg{exit}}
+\newcommand{\gramentry}{\reg{entry}}
+\newcommand{\balanced}{\reg{balanced}}
+\newcommand{\flowsto}{\reg{flowsto}}
+\newcommand{\iflowsto}{\invreg{flowsto}}
+\newcommand{\alias}{\reg{alias}}
+\newcommand{\flows}{\reg{flows}}
+\newcommand{\iflows}{\invreg{flows}}
+\newcommand{\new}{\reg{new}}
+\newcommand{\inew}{\invreg{new}}
+\newcommand{\inewfield}[1]{\invreg{new[#1]}}
+\newcommand{\assign}{\reg{assign}}
+\newcommand{\iassign}{\invreg{assign}}
+\newcommand{\store}{\reg{store}}
+\newcommand{\istore}{\invreg{store}}
+\newcommand{\load}{\reg{load}}
+\newcommand{\iload}{\invreg{load}}
+
+\newcommand{\recoveredctx}{\reg{recoveredCtx}}
+\newcommand{\matched}{\reg{matched}}
+\newcommand{\siterecovered}{\reg{siteRecovered}}
+\newcommand{\ctxrecovered}{\reg{ctxRecovered}}
+
+\newcommand{\loadfield}[1]{\reg{load[#1]}}
+\newcommand{\hloadfield}[1]{\reg{hload[#1]}}
+\newcommand{\iloadfield}[1]{\invreg{load[#1]}}
+\newcommand{\storefield}[1]{\reg{store[#1]}\xspace}
+\newcommand{\istorefield}[1]{\invreg{store[#1]}}
+
+\newcommand{\baltrans}{\reg{balanced}}
+\newcommand{\eqdef}{\xlongequal{\text{def}}}
+
+\newcommand{\RawCtx}[1]{\mathscr{P}(#1)\xspace}
+\newcommand{\RawCtxHat}[1]{{\mathscr{E}}(#1)\xspace}
+\newcommand{\RawCtxCheck}[1]{{\mathscr{E}}(#1)\xspace}
+\newcommand{\BalParen}[1]{\mbox{$\mathscr{B}(#1)$}\xspace}
+\newcommand{\BalParenBig}[1]{\mbox{$\mathscr{B}\Big(#1 \Big)$}\xspace}
+\newcommand{\KeepExit}[1]{\mbox{$\check\mathsf{KeepExit}(#1)$}\xspace}
+\newcommand{\KeepEntry}[1]{\mbox{$\mathsf{KeepEntry}(#1)$}\xspace}
+
+\newcommand{\pag}{PAG\xspace}
+%% NEW CFL
+\newcommand{\manuLFC}{$L_{FC}$\xspace}
+\newcommand{\manuLFCDD}{\mbox{$L_{FC}^{dd}$}\xspace}
+\newcommand{\manuCapLFC}{$L_{FC} = L_{F} \cap L_{C}$\xspace}
+\newcommand{\manuLF}{$L_F$\xspace}
+\newcommand{\manuLC}{\mbox{$L_C$}\xspace}
+\newcommand{\LFCR}{\mbox{${L}_{DCR}$}\xspace}
+\newcommand{\capLFCR}{${L}_{DCR} = {L}_{D} \cap {L}_{C} \cap {L}_{R}$\xspace}
+\newcommand{\capLFC}{${L}_{DC} = {L}_{D} \cap {L}_{C}$\xspace}
+\newcommand{\capLGC}{${L}_{D^rC} = {L}_{D^r} \cap {L}_{C}$\xspace}
+\newcommand{\LFC}{\mbox{${L}_{DC}$}\xspace}
+\newcommand{\LDC}{\LFC}
+\newcommand{\LGC}{\mbox{${L}_{D^rC}$}\xspace}
+\newcommand{\LF}{\mbox{${L}_D$}\xspace}
+\newcommand{\LG}{\mbox{${L}_{D^r}$}\xspace}
+\newcommand{\LC}{\mbox{${L}_C$}\xspace}
+\newcommand{\LR}{\mbox{${L}_R$}\xspace}
+
+\newcommand{\findtype}{\reg{findtype}}
+\newcommand{\ifindtype}{\invreg{findtype}}
+\newcommand{\indispatch}{\reg{dispatch}}
+\newcommand{\iindispatch}{\invreg{dispatch}}
+\newcommand{\iindispatchfield}[1]{\invreg{dispatch[#1]}}
+
+\newcommand{\argtorecv}[1]{\reg{arg2recv[#1]}}
+\newcommand{\iargtorecv}[1]{\invreg{arg2recv[#1]}}
+\newcommand{\typefound}{\reg{typefound}}
+\newcommand{\itypefound}{\invreg{typefound}}
+\newcommand{\typeof}{\texttt{typeOf}}
+\newcommand{\dyntypeof}{\texttt{DynTypeOf}}
+\newcommand{\decltypeof}{\texttt{DeclTypeOf}}
+\newcommand{\dispatch}{\reg{interassign}}
+\newcommand{\idispatch}{\invreg{interassign}}
+\newcommand{\dispatchbalance}{\reg{dispatchbalance}}
+
+\newcommand{\ret}{0}
+
+\newcommand*{\bluewemph}[1]{%
+  \tikz[baseline=(X.base)] \node[rectangle, fill=blizzardblue, opacity=.6, inner sep=0.2mm] (X) {#1};%
+}
+
+\newcommand{\R}{\textsf{R}}
+
+% \newcommand{\argrec}{\regt{store}}
+% \newcommand{\recparm}{\regt{dispatch}}
+
+\newcommand{\challenge}[1]{\textbf{CHL#1}}
+
+\newcommand{\colora}{brown}
+\newcommand{\colorb}{red}
+\newcommand{\colorc}{blue}
+\newcommand{\colord}{teal}
+
+% Data Commands
+
+\newcommand{\toolPreTime}{2.1\xspace}
+\newcommand{\sparkPreTime}{13.1\xspace}
+
+\newcommand{\MAXTOOLONECFASPEEDUP}{4.1x\xspace}
+\newcommand{\AVGTOOLONECFASPEEDUP}{3.1x\xspace}
+\newcommand{\MINTOOLONECFASPEEDUP}{1.8x\xspace}
+\newcommand{\MAXTOOLTWOCFASPEEDUP}{5.0x\xspace}
+\newcommand{\AVGTOOLTWOCFASPEEDUP}{3.1x\xspace}
+\newcommand{\MINTOOLTWOCFASPEEDUP}{1.2x\xspace}
+\newcommand{\OVERALLTOOLSPEEDUP}{3.1x\xspace}
+
+\Crefname{equation}{{\rm Eq.}}{Equations}
+\Crefname{section}{{\rm Sec.}}{Section}
+\Crefname{figure}{{\rm Fig.}}{Figure}
+
+%rectangle color
+\def\chIIcolor{red!30}\def\chIIIcolor{green!30}\def\chIVcolor{blue!30}
+\newcommand\crule[3][black]{\textcolor{#1}{\rule{#2}{#3}}}
+
+\newsavebox{\mybox}

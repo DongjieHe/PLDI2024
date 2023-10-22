@@ -1,0 +1,127 @@
+\section{CFL-Reachability Formulation of $k$-CFA-based Pointer Analysis}
+\label{sec:CFL}
+
+
+\subsection{Dynamic Dispatch for Context-Insensitive Analysis}\label{sec:ddci}
+We might as well start with the dispatch of context-insensitive analysis. In the problem of parameter passing, the key is that the parameter passing path fails to reflect the process of dispatching through the dynamic type of the receiver object. Therefore, our main task is to make this part into the original parameter passing path.
+
+When a value is passed to a virtual callsite as an argument, we cannot immediately know which specific method parameter the argument should go to. Instead, we should first query the receiver of this callsite to see which objects it points to, so as to decide where to go according to its type. Reflected in graph reachability, we use \argrec to mark the beginning of searching for a receiver object. After we find the specific object, we need to know which callsite (to be precise, its method signature) is being processed to dispatch correct method according to the type and method signature. We also need to know which parameter is being passed in order to pass the correct parameter after dispatch. This can be solved by adding a set of balanced parentheses with method signature and parameter: When we start looking for receiver object at \argrec, we introduce the method signature of the callsite and the target parameter on the stack. That is, \argrec[m:i]. After finding the specific object, we can match it with, say, \recparm[m:i] to pass the argument to the correct formal parameter, which can be established statically. That is, the previous "entry" edge in \rulename{P-Call} is parsed with \argrec[m:i] \iflowsto \recparm[m:i] rather than a simple \assign edge as before. And the non-terminal \flows in \cref{eqn:callsiteLF} is changed to ("exit" edge in \rulename{P-Call} and \iflows in \cref{eqn:callsiteLF} should be changed accordingly but omitted here):
+\begin{equation}
+\label{eqn:newFlows}
+\begin{split}
+\flows & \longrightarrow \assign \\
+    &\mid \storefield{f} \ \alias\ \loadfield{f} \\
+    &\mid \argrec[m:i]\ \iflowsto\ \recparm[m:i]\\
+\end{split}
+\end{equation}
+
+For example, when we use $L_F$ to formulate the points-to relations for the program in \cref{fig:motivatingExample}, using a call-graph pre-built by a context-insensitive analysis would be meaningless; but we would have to face the situation in \cref{eq:LFCPathCGImprecise} if using a less precise callgraph algorithm such as CHA \cite{dean1995optimization}. By applying our new dispatching rule, a parsing for dispatching path is processed whenever some value flows into \inline{x.foo(d); // c3} (line~17). There will be two entry paths generated in total:
+\begin{equation}
+  \centering
+\label{eq:ParmPathI}
+\begin{tabular}{l} \scriptsize
+$\texttt{d}\xrightarrow{\argrec[A:foo():1]}\texttt{x}
+\xrightarrow[\check{\mathtt{c1}}]{\iassign}\texttt{a}
+\xrightarrow{\inew}$\commentfont{A}$\xrightarrow{\recparm[A:foo():1]}\texttt{p}$
+\end{tabular}
+\end{equation}
+\begin{equation}
+  \centering
+\label{eq:ParmPathII}
+\begin{tabular}{l} \scriptsize
+$\texttt{d}\xrightarrow{\argrec[A:foo():1]}\texttt{x}
+\xrightarrow[\check{\mathtt{c2}}]{\iassign}\texttt{b}
+\xrightarrow{\inew}$\commentfont{B}$\xrightarrow{\recparm[A:foo():1]}\texttt{q}$
+\end{tabular}
+\end{equation}
+Therefore, the case in \cref{eq:LFCPathCGImprecise} is prohibited as no instance of \texttt{C} flows to \texttt{x}.
+
+\subsection{Dynamic Dispatch for Context-Sensitive Analysis}
+\subsubsection{Context-Sensitive Grammar}
+If we apply the rules introduced in \cref{sec:ddci} to a context-sensitive analysis, as the process of finding receiver object is included in the path, some problem in the precision loss case shown in \cref{eq:LFCPathCGPreciseI} and \cref{eq:LFCPathCGPreciseII} can be solved easily.
+
+The entry edge $\texttt{d}
+    \xrightarrow[\hat{c3}]{\assign} \texttt{p}$ is replaced with:
+\begin{equation}
+  \centering
+\label{eq:ParmPath}
+\begin{tabular}{l} \scriptsize
+$\texttt{d}\xrightarrow{\argrec[A:foo():1]}\texttt{x}
+\xrightarrow[\check{\mathtt{c1}}]{\iassign}\texttt{a}
+\xrightarrow{\inew}$\commentfont{A}$\xrightarrow{\recparm[A:foo():1]}\texttt{p}$
+\end{tabular}
+\end{equation},
+and correspondingly, the path described by \cref{eq:LFCPathCGPreciseI} and \cref{eq:LFCPathCGPreciseII} now becomes:
+\begin{equation}
+  \centering
+\label{eq:newLFPathI}
+\begin{tabular}{l} \scriptsize
+\commentfont{O1}$\xrightarrow{\new}
+\texttt{o1}\xrightarrow[\hat{\mathtt{c1}}]{\assign}
+\texttt{o} \xrightarrow{\store[f]} \texttt{d}
+\xrightarrow{\inew}$ \commentfont{D} 
+$ \xrightarrow{\new} \texttt{d}\xrightarrow{\argrec[A:foo():1]}\texttt{x}$\\
+$\xrightarrow[\check{\mathtt{c1}}]{\iassign}\texttt{a}
+\xrightarrow{\inew}$\commentfont{A}$\xrightarrow{\recparm[A:foo():1]}\texttt{p}
+    \xrightarrow{\load[f]} \texttt{v}
+$
+\end{tabular}
+\end{equation}
+and
+\begin{equation}
+  \centering
+\label{eq:newLFPathII}
+\begin{tabular}{l} \scriptsize
+\commentfont{O2}$\xrightarrow{\new}
+\texttt{o2}\xrightarrow[\hat{\mathtt{c2}}]{\assign}
+\texttt{o} \xrightarrow{\store[f]} \texttt{d}
+\xrightarrow{\inew}$ \commentfont{D} 
+$ \xrightarrow{\new} \texttt{d}\xrightarrow{\argrec[A:foo():1]}\texttt{x}$\\
+$\xrightarrow[\check{\mathtt{c1}}]{\iassign}\texttt{a}
+\xrightarrow{\inew}$\commentfont{A}$\xrightarrow{\recparm[A:foo():1]}\texttt{p}
+    \xrightarrow{\load[f]} \texttt{v}
+$
+\end{tabular}
+\end{equation}
+We can see that \commentfont{O2} are not $L_{FC}$-reachable to \texttt{v} any more due to unbalanced context, which meet the expectation in \kcs{2}.
+
+However, the context state after the parameter passing is different from the traditional $L_{FC}$ which depends on a known control-flow by doing so. For example, if we simply apply \cref{eqn:newFlows}, we will find that although we can find the correct formal parameter for this single parameter passing, the context for \texttt{p} or \texttt{v} after the parameter passing is not as expected. We note the new $L_F$ applying the rules in \cref{sec:ddci} as $L_{F'}$. The path from \commentfont{O1} to 
+\texttt{v} is expressed by $L_{FC}$ as \cref{eq:LFCPathCGPreciseI} but is expressed by $L_{F'C}$ as \cref{eq:newLFPathI}.
+The $L_C$ strings for these two are $\hat{\mathtt{c1}}\hat{\mathtt{c3}}$ and $\hat{\mathtt{c1}}\check{\mathtt{c1}}$, respectively; And the context states when the parameter passing is completed are $\hat{\mathtt{c1}}\hat{\mathtt{c3}}$ and $\epsilon$, respectively.
+We know that the callsite-sensitivity is modeling call stacks, so $L_{F'C}$ is incorrect for a context-sensitive analysis.
+
+So how to handle call stack correctly?
+We know that when callsite-sensitivity is passed, although we need to know what objects the receiver points to, the context has nothing to do with the receiver object.
+(This is different from some other context-sensitivity, such as object-sensitivity~\cite{objsens}). The irrelevance means that the current callsite should follow the context before passing the parameters to describe the complete call stack, just like what the "entry" and "exit" edges did in the past (\rulename{P-Call}).
+Due to the extra process of finding the receiver object in $L_{F'C}$, the context of this part is also brought in, messing up the context.
+
+The correct approach should be to record the current context state before looking for the receiver object, and after finding the corresponding formal parameters, discard all current contexts and restore to the previous context state.
+Besides, we should also record the callsite of the receiver, so that when we find the corresponding parameters, we can correctly add the callsite as a new context element to the restored context.
+
+For example, when \commentfont{O1} comes into \inline{x.foo(d); // c3} (line~17), we will have a path \commentfont{O1}$\xrightarrow{\new}
+\texttt{o1}\xrightarrow[\hat{\mathtt{c1}}]{\assign}
+\texttt{o} \xrightarrow{\store[f]} \texttt{d}
+\xrightarrow{\inew}$ \commentfont{D} 
+$ \xrightarrow{\new} \texttt{d}$ notifying $\hat{\mathtt{c1}}$ is left in its context stack. We also keep current callsite which is \texttt{c3}. After parameter passing to \texttt{p} in the way shown in \cref{eq:newLFPathI}, $\hat{\mathtt{c1}}$ is restored and followed with \texttt{c3}, which is the same as what formed by $L_{FC}$.
+
+This process is essentially the same as the demand-driven analysis' algorithm.
+However, this process is obviously context-sensitive.
+In order to benefit various technologies using CFL, we propose a way to restore context based on context-free grammar under just field-sensitive and call-site sensitive analysis.
+
+\subsubsection{Context-Free Grammar}
+
+
+
+\paragraph{\bf $L_R$ language is used for context restore}
+\begin{equation}
+    \begin{split}
+L_{R} & \longrightarrow S^*\\
+S & \longrightarrow \check{c_i} \mid \hat{c_i} \mid  R \mid \epsilon\\
+R & \longrightarrow \hat{\boxed{c_i}} ~ restore ~ \check{\boxed{c_i}}\\
+\textsf{restore} & \longrightarrow \check{c_i} ~ \textsf{restore} ~ \hat{c_i} \mid 
+\hat{c_i} ~ \textsf{restore} ~ \check{c_i} \\
+& \longrightarrow R ~ \textsf{restore} ~ R \mid \hat{\tau} \mid \check{\tau}
+    \end{split}
+\end{equation}
+
+Using the above languages, we can realize dynamic dispatching under the limitation of context-free language while restoring the traditional call stack representation.

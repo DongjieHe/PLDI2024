@@ -1,0 +1,20 @@
+
+\balance
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+We have introduced \LFCR, a new CFL-reachability formulation for supporting
+$k$-callsite-based context-sensitive pointer analysis (\kcs{k}) with its own built-in
+call graph construction mechanism for handling dynamic dispatch. 
+To demonstrate its utility, we have also introduced
+\tool, which is developed based on \LFCR, for accelerating \kcs{k} while preserving its precision. 
+We hope that \LFCR can provide some new insights on understanding
+\kcs{k},  especially its demand-driven incarnations \cite{sridharan2005demand, sridharan2006refinement, yan2011demand},
+and developing  new algorithmic solutions. In addition to selective context-sensitivity,
+we also plan  to investigate the opportunities for leveraging \LFCR in
+library-code summarization \cite{shang2012demand,  tang2015summary, chen2021accelerating} and
+  information flow analysis \cite{li2020fast, milanova2020flowcfl}.
+
+%We have implemented \tool in \soot and evaluated it against \kcs{k}. Our evaluation shows that \tool achieves substantial performance speedups over \kcs{k} while maintaining its precision. 
+

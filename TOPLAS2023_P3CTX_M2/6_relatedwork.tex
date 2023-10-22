@@ -1,0 +1,145 @@
+\section{Related Work}
+\label{sec:relatedwork}
+
+%There are two strands of closely related work: CFL-reachability and selective context-sensitivity. 
+
+We discuss only the prior work closely related to this work, by focusing on (1)
+exploiting CFL-reachability in developing context-sensitive
+pointer analysis algorithms for object-oriented languages and (2) selective
+context-sensitivity for accelerating such   pointer analysis
+algorithms.
+
+
+% \subsection{CFL-Reachability}
+% \label{subsec:aboutCflReachability}
+
+%\smallskip
+%\noindent
+\subsection{ CFL-Reachability} 
+\label{sec:relatedwork:cfl}
+
+In program analysis, CFL-reachability  \cite{reps1995precise, reps1998program} was initially introduced for supporting inter-procedural dataflow analysis. It has since been  used in tacking many other problems such as pointer analysis \cite{sridharan2005demand, sridharan2006refinement, zheng2008demand, xu2009scaling, yan2011demand, shang2012demand, zhang2013fast, lu2019precision, lu2021eagle}, information flow \cite{li2020fast, milanova2020flowcfl},
+%{ dataflow analysis \cite{Spath2019SPDS}} 
+and type inference \cite{rehof2001type, pratikakis2006existential}. 
+
+For callsite-based context-sensitive pointer analysis \cite{sridharan2006refinement, yan2011demand, shang2012demand}, 
+the  CFL-reachability formulation
+used so far relies
+on a separate mechanism for call graph construction (in advance or on the fly),
+as discussed in \Cref{subsec:motivation}. 
+In this paper, we introduce a CFL-reachability formulation with such a mechanism built in, by using a 
+new language \LFCR
+expressed as the intersection of three  CFLs. 
+
+% When this paper was reviewed, we were made aware of an earlier attempt
+% by Sridharan 
+% \cite{sridharan2007refinement} in addressing the same problem in his PhD thesis \cite{sridharan2007refinement}. 
+\hl{An earlier attempt to address the same problem was proposed by Sridharan in his PhD thesis \cite{sridharan2007refinement}, which, to the best of our knowledge, has not been published in a peer-reviewed publication.}
+In his approach, context-sensitive pointer analysis with on-the-fly call graph construction is formulated as the intersection of two CFLs,  $L_{OTF} \cap L_{C'}$, on a specially designed \pag. $L_{OTF}$, which extends \manuLF to support on-the-fly call graph construction, is quite similar to \LF
+proposed in this paper. At a virtual callsite, both $L_{OTF}$ and \LF first establish
+a $\iflowsto$ value-flow to find its receiver objects, together with  their types, then find a $\flowsto$ value-flow to return to the virtual callsite, and finally, perform the virtual call dispatch according to the types of the discovered receiver objects. However,   $L_{OTF}$ and \LF differ mainly in how they handle parameter passing and method returns at a virtual callsite. In $L_{OTF}$, the parameter passing and 
+method returns are modeled essentially as \assign edges with different edge labels such as \texttt{receiver[i][s]}, \texttt{paramForType[T][s]} and \texttt{returnForType[T][s]}, making its grammar  intuitive but somewhat complex. In contrast, \LF handles parameter passing and method returns uniformly as  stores and loads, making its grammar also intuitive yet simple. In addition, $L_{OTF}$ requires statement matching in its non-terminals such as \texttt{dispatch[i][s]} to ensure 
+that the parameter passing for an argument to a parameter always happens at the same callsite. This is achieved in our \LR language by using the boxed edge labels
+as revealed in \Cref{eqn:callsiteLR}. 
+% Noteworthy, $L_{OTF}$ is as precise as \LF in computing the points-to information for the context-insensitive, field-sensitive pointer analysis despite the fact that  $L_{OTF}$ filters more infeasible paths via statement matching. 
+$L_{C'}$ in Sridharan's formulation is identical to $L_C$ despite some notational differences. Finally, $L_{OTF} \cap L_{C'}$ is sound but less precise than \LFCR due to the lack of \LR introduced in this paper. Without \LR, a context used for
+ performing parameter passing at a virtual callsite can be restored
+ incorrectly as a different context after finding the dispatched method and returning to the same  callsite, as illustrated in \Cref{fig:LFC-imprecision-context}.
+
+Another line of research on CFL-reachability focuses on  its computational complexity. 
+In general, the all-pairs CFL-reachability problem can be solved in $O(m^3n^3)$ time, 
+where $m$ is the size of its underlying CFL grammar and $n$ is the number of its underlying
+graph nodes.
+Kodumal et. al \cite{kodumal2004set} solve the Dyck-CFL-reachability  
+more efficiently in $O(mn^3)$. Later, Chaudhuri \cite{chaudhuri2008subcubic} shows that the
+general CFL-reachability algorithm can be optimized into a subcubic one by exploiting the well-known Four Russians' Trick~\cite{kronrod1970economic}. Recently,
+Zhang et. al \cite{zhang2013fast} show that  bidirected Dyck-CFL reachability can be solved in $O(n + p ~ \log ~ p)$  (where $p$ is the number of its underlying graph edges) by noting that the reachability relation in a bidirected graph is an equivalence relation. This time complexity is further reduced to $O(p + n \cdot \alpha(n))$ in \cite{chatterjee2017optimal}, where $\alpha(n)$ is the inverse Ackermann function. 
+A few recent works focus on studying the complexity of interleaved Dyck-CFL reachability. Let $\mathcal{D}_k$ be a Dyck-CFL with $k$ different kinds of parentheses. On a general graph, Reps et al \cite{reps2000undecidability} proved earlier that $\mathcal{D}_k \cap \mathcal{D}_k$ is undecidable when $k > 1$. Later, Englert et al. \cite{englert2016reachability} proved that  $\mathcal{D}_1 \cap \mathcal{D}_1$ is NL-complete. The complexity of $\mathcal{D}_k \cap \mathcal{D}_1$ remains open. On a bidirected graph, Li et al. \cite{li2021complexity} have recently shown that $\mathcal{D}_1 \cap \mathcal{D}_1$ is in \textbf{PTIME} and provides an algorithm computable in $O(n^7)$, which has
+subsequently been improved to $O(n^3\cdot \alpha(n))$ by Kjelstr\o{}m and Pavlogiannis \cite{kjelstrom2022decidability}. In addition, Kjelstr\o{}m and Pavlogiannis \cite{kjelstrom2022decidability} also prove that $\mathcal{D}_k \cap \mathcal{D}_k$ is undecidable when $k > 1$. In this paper, the \pag for a program can be seen as a bidirected graph for \LC and \LR, but not
+as a bidirected graph for \LF since a reverse label $\overline{\ell} \in \{\inewfield{t}, \iindispatchfield{t}, \iloadfield{f}, \istorefield{t}\}$ cannot be matched by $\ell$ in \LF. Therefore, \LFCR is undecidable (as discussed in \Cref{subsec:LFCRComplexity}).
+In addition, we have also introduced \tool as an \LFCR-enabled pre-analysis 
+that is linear in terms of the number of
+PAG edges in a program for accelerating \kcs{k} without any precision loss. 
+
+ 
+
+For a CFL-reachability-based formulation \cite{lu2019precision, lu2021eagle}   proposed for
+supporting object-sensitive pointer
+analysis \cite{milanova2002parameterized,milanova2005parameterized} (denoted
+$L_{FC}^o$ here),  call graph
+construction is  built-in naturally since object-sensitivity uses receiver objects
+as context elements. 
+$L_{FC}^o$ is  defined as the intersection of two CFLs, 
+$L_{F}^o \cap L_{C}^o$, where $L_{F}^o$ ensures field-sensitivity as well
+as  parameter
+passing and method returns at virtual callsites and $L_{C}^o$ enforces
+object-sensitivity. Due to the nature of object-sensitivity
+\cite{milanova2002parameterized,milanova2005parameterized},
+$L_{FC}^{o}$ adopts the allocation-site-based dispatch approach illustrated in \Cref{fig:approach2}. At an allocation site, the type of the receiver object allocated can be deduced
+immediately (for supporting object-sensitivity), thus avoiding the need of 
+encoding type information in the labels of some \pag edges such as \new[\texttt{t}] and \indispatch[\texttt{t}] as in \LF (for supporting callsite-based
+context-sensitivity). Thus,  on-the-fly call graph construction is supported naturally in $L_{FC}^o$ (even though the \pag of a program is still pre-built
+by applying  a context-insensitive pointer
+analysis). 
+For
+callsite-sensitivity, however, incorporating call graph construction into the
+traditional CFL-reachability formulation \cite{sridharan2006refinement, yan2011demand, shang2012demand} is non-trivial (as described in \Cref{sec:backgroundAndMotivation}). To the best of our
+knowledge, \LFCR represents the first such a solution.
+
+\begin{comment}
+\hl{$L_{FC}^o$ is also defined as the intersection of two CFLs, 
+$L_{F}^o \cap L_{C}^o$, where $L_{F}^o$ ensures field-sensitivity as well
+as correct parameter
+passing and method returns at virtual callsites and $L_{C}^o$ enforces
+context sensitivity. 
+In $L_{F}^o$, passing an argument \texttt{d} to a parameter
+\texttt{p} at a virtual callsite \texttt{x.foo(d)} will first 
+go through a store edge $\texttt{d} \xrightarrow{\storefield{p}} \texttt{x}$, 
+which  triggers immediately a 
+$\iflowsto$ traversal looking for a receiver object \texttt{o} of \texttt{x} as in
+\LF. Once the receiver object is found, this formulation requires traversing  an \hloadfield{p} edge $\texttt{o} \xrightarrow[\hat{o}]{\hloadfield{p}} \texttt{p}$ to complete the parameter passing process. 
+Let \texttt{foo'()} be a potential target method where \texttt{p} is declared. When constructing the \pag for the program, $\texttt{d} \xrightarrow{\storefield{p}} \texttt{x}$ is added only if \texttt{foo'()} is
+a potential target method of \texttt{x.foo(d)} and $\texttt{o} \xrightarrow[\hat{o}]{\hloadfield{p}}
+\texttt{p}$ is added only if \texttt{o} is a potential receiver object of \texttt{foo'} (which was
+guaranteed by using a less precise pointer analysis (e.g., \spark) in \cite{lu2019precision, lu2021eagle}). 
+In the above process, once \texttt{o} is found to be a receiver object of \texttt{x} via the 
+$\iflowsto$ traversal and the  $\texttt{o} \xrightarrow[\hat{o}]{\hloadfield{p}}
+\texttt{p}$ edge does exist in the \pag, the parameter passing from \texttt{d} to \texttt{p} is correct due to \texttt{o} is indeed a receiver object of \texttt{x.foo(d)} and the dispatching process has been implicitly handled when constructing the \pag. Meanwhile, the spurious parameter passing paths could not be traversed due to the spurious receiver objects introduced by the less precise analysis could never be found by the $\iflowsto$ traversal. In $\texttt{o} \xrightarrow[\hat{o}]{\hloadfield{p}}
+\texttt{p}$, the below edge label $\hat{o}$ represents an open parenthesis in $L_{C}^o$. As mentioned in the last paragraph of \Cref{subsubsec:newLF}, $L_{FC}^{o}$ adopts the allocation-site-based dispatching approach (as in \Cref{fig:approach2}) due to the fact that after the parameter passing from \texttt{d} to \texttt{p}, the context of \texttt{p} in $L_{C}^o$ happens to be as desired in object-sensitive pointer
+analysis \cite{milanova2002parameterized,milanova2005parameterized} (where methods with variables/objects therein uses receiver objects as context elements). At the allocation sites, the types of the receiver objects are obvious, implying that encoding type information in edge labels such as \new[\texttt{t}] and \indispatch[\texttt{t}] as in \LF is not necessary. Thus, the on-the-fly call graph is supported naturally in $L_{FC}^o$.} 
+
+\end{comment}
+
+
+
+% \subsection{Selective Context-sensitivity}
+% \label{subsec:aboutSelectiveCS}
+
+%\bigskip
+%\noindent
+\subsection{Selective Context-Sensitivity} 
+
+There are three types of approaches: (1) heuristic- or pattern-based \cite{
+hassanshahi2017efficient, li2018precision, li2020principled}, (2) data-driven  \cite{jeong2017data, jeon2018precise}, and (3) CFL-reachability-guided  \cite{lu2019precision, lu2021eagle, lu2021selective, He2021Turner, he2022selecting}. 
+By exploiting CFL-reachability, \eagle \cite{lu2019precision, lu2021eagle}, \turner \cite{He2021Turner, he2022selecting}, and \conch \cite{HeASE21, he2023ifds} represent recent efforts in accelerating object-sensitive pointer analysis \cite{milanova2002parameterized, milanova2005parameterized}. \selectx \cite{lu2021selective} represents the first attempt for accelerating \kcs{k} with CFL-reachability. However, 
+\selectx is not precision-preserving since its underlying
+\manuLFC-based formulation \cite{sridharan2006refinement} \hl{does not incorporate a call graph construction mechanism.} % is incomplete. 
+In this paper, 
+we introduce \tool, the first precision-preserving pre-analysis for accelerating
+\kcs{k},  based on \LFCR.
+ 
+
+
+
+\begin{comment}
+To further tap the performance potential of context-sensitive analysis, many selective approaches, which select a subset of precision-critical methods/variables for context-sensitive analysis,  have been proposed recently \cite{jeong2017data, jeon2018precise, hassanshahi2017efficient,li2018precision, li2020principled, lu2019precision, lu2021eagle, lu2021selective, He2021Turner}. Based on their designing principles, these approaches could be roughly classified into three categories: (1) heuristic- or pattern-based approaches \cite{ hassanshahi2017efficient, li2018precision, li2020principled}, (2) data-driven approaches \cite{jeong2017data, jeon2018precise}, and (3) CFL-reachability-guided approaches \cite{lu2019precision, lu2021eagle, lu2021selective, He2021Turner}. 
+
+Heuristic- or pattern-based approaches rely on some empirical heuristics or commonly used patterns for selecting the set of precision-critical methods/variables
+to be analyzed context-sensitively. For example, \cite{hassanshahi2017efficient} leverage manually-selected metrics to define some heuristics to guide context selection. 
+\zipper \cite{li2018precision, li2020principled} makes its context selection by determining whether a method contains variables/objects on some paths of certain value-flow patterns. 
+
+Data-driven approaches \cite{jeong2017data, jeon2018precise} apply machine learning to learn a set of heuristic formulas from small test cases for guiding context selection. Unlike \tool, which takes a little time in their pre-analysis stage, data-driven approaches spend a ton of  training time before their main analyses. 
+
+CFL-reachability-guided approaches \cite{lu2019precision, lu2021eagle, lu2021selective, He2021Turner} rely on some CFL formulations of pointer analysis for making context selection thus are more explainable from principle. \eagle \cite{lu2019precision, lu2021eagle} represents a precision-preserving acceleration for object-sensitivity \cite{milanova2002parameterized, milanova2005parameterized}. \turner \cite{He2021Turner} explores a better efficiency and precision trade-offs by exploiting object containment. \selectx \cite{lu2021selective} represents the first try of acceleration for \kcs{k} with CFL-reachability. However, it could not guarantee to preserve baseline's precision due to a lack of a call graph construction mechanism built-into the conventional CFL formulation \cite{sridharan2005demand, sridharan2006refinement}. This paper has designed a new CFL to handle this limitation and also has implemented \tool, the first precision-preserving acceleration for \kcs{k}.   
+\end{comment}
+

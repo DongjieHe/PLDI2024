@@ -1,0 +1,96 @@
+ \begin{figure*}
+\centering
+\resizebox{0.63\width}{0.66\height}{
+\begin{tikzpicture}
+    \draw [draw=black!5, fill=black!5] (-0.3,2.2) rectangle (5.0,1.2); % A::foo
+    \draw [draw=black!5, fill=black!5] (-0.3,0.5,0) rectangle (5.0,-0.5); % C::foo
+    \draw [draw=black!5, fill=black!5] (-0.3,-1.0,0) rectangle (5.0,-2.0);  % B::foo
+    % \draw [draw=black!5, fill=black!5] (-10.5,1.7,0) rectangle (-3.5,0.9); % main
+    % \draw [draw=black!5, fill=black!5] (-10.5,-1.5,0) rectangle (-3.5,-.8); % main
+    \draw [draw=black!5, fill=black!5] (-10.5,1.5,0) rectangle (-7.0,-1.5); % main
+    \draw [draw=black!5, fill=black!5] (8.0,1.5,0) rectangle (11.5,-1.5); % main
+    
+    \draw [draw=black!5, fill=black!5] (-6.0,0.6,0) rectangle (-1.0,-0.6); % bar
+    \draw [draw=black!5, fill=black!5] (6.0,0.6,0) rectangle (7.2,-0.6); % bar
+    
+    \node(d)[xshift=-2cm] {\texttt{d}};
+    % \node(d)[left of =x, xshift=0.5cm] {\texttt{d}};
+    \node(D)[left of=d, xshift=1cm, yshift=.0cm] {\texttt{D1}};
+    \node(o)[left of=D, xshift=1.5cm] {\texttt{o}};
+    \node(o1)[above left of=o, yshift=-1.2cm] {\texttt{o1}};
+    \node(O1)[left of=o1, xshift=1cm] {\texttt{O1}};
+    \node(o2)[below left of=o, yshift=1.1cm] {\texttt{o2}};
+    \node(O2)[left of=o2, xshift=1cm] {\texttt{O2}};
+    % \node(xc)[right of=x, xshift=-1cm] {\texttt{x\#c3}};
+    \node(p)[above right of=d, yshift=-0.5cm]{\texttt{p}};
+    \node(r)[right of=d]{\texttt{r}};
+    \node(v)[right of=p,xshift=-1cm]{\texttt{v}};
+    \node(thisA)[right of=v, xshift=-1.5cm] {$\texttt{this}^\texttt{A:foo()}$};
+    \node(thisC)[below of=thisA, yshift=1.4cm] {$\texttt{this}^\texttt{C:foo()}$};
+    \node(thisB)[below of=thisC, yshift=1.3cm] {$\texttt{this}^\texttt{B:foo()}$};
+    \node(q)[below right of=d, yshift=0.5cm] {\texttt{q}};
+    
+    \node(x) [right of =thisC] {\texttt{x}};
+    \node(a)[above right of=x, yshift=-1.2cm] {\texttt{a}};
+    \node(A)[right of=a, xshift=-1cm] {\texttt{A1}};
+    \node(b)[below right of=x, yshift=1.2cm] {\texttt{b}};
+    \node(B)[right of=b, xshift=-1cm] {\texttt{B1}};
+
+    
+    \path[-stealth]
+    (O1) edge[sloped] node{$\new$} (o1)
+    (O2) edge[sloped] node{$\new$} (o2)
+    
+    (A) edge[sloped] node{$\new$} (a)
+    (B) edge[sloped] node{$\new$} (b)
+    
+    (D) edge[sloped, above] node{$\new$} (d)
+    
+    (a) edge[sloped,bend right=25] node{\assign} (x)
+    (a) edge[sloped,bend right=25,below] node{$\hat{\mathtt{c1}}$} (x)
+    (o1) edge[sloped,bend left=10] node{\assign} (o)
+    (o1) edge[sloped,bend left=10,below] node{$\hat{\mathtt{c1}}$} (o)
+    
+    (b) edge[sloped,bend left=25] node{\assign} (x)
+    (b) edge[sloped,bend left=25,below] node{$\hat{\mathtt{c2}}$} (x)
+    (o2) edge[sloped,bend right=10] node{\assign} (o)
+    (o2) edge[sloped,bend right=10,below] node{$\hat{\mathtt{c2}}$} (o)
+    
+    (o) edge[sloped, bend right=40] node{$\store[\texttt{f}]$} (d)
+    
+    (d) edge[sloped,bend left=10] node{\assign} (p)
+    (d) edge[sloped,bend left=10,below] node{$\hat{\mathtt{c3}}$} (p)
+    
+    (d) edge[sloped,bend right=0] node{\assign} (r)
+    (d) edge[sloped,bend right=0,below] node{$\hat{\mathtt{c3}}$} (r)
+    
+    (d) edge[sloped,bend right=10] node{\assign} (q)
+    (d) edge[sloped,bend right=10,below] node{$\hat{\mathtt{c3}}$} (q)
+    
+    % (d) edge[sloped,bend left=0] node{$\store[1]$} (x)
+    % (d) edge[sloped,bend left=0,below] node{$\hat{\boxed{\mathtt{c3}}}$} (x)
+    
+    % (x) edge[sloped,bend right=30] node{$\assign$} ([shift={(-.1,-.2)}]xc)
+    % (x) edge[sloped,bend right=30,below] node {$\check{\boxed{\mathtt{c3}}}$} ([shift={(-.1,-.2)}]xc)
+    % (x) edge[sloped,bend left=30] node{$\assign$} ([shift={(-.1,.2)}]xc)
+    
+    (x) edge[sloped,bend right=20] node{$\assign$} (thisA)
+    (x) edge[sloped,bend right=20,below] node{$\hat{\mathtt{c3}}$} (thisA)
+    % (thisA) edge[sloped] node{$\load[1]$} (p)
+    (p) edge[sloped] node{$\load[\texttt{f}]$} (v)
+    
+    (x) edge[sloped, bend left=20] node{$\assign$} (thisB)
+    (x) edge[sloped, bend left=20, below] node{$\hat{\mathtt{c3}}$} (thisB)
+    % (thisB) edge[sloped] node{$\load[1]$} (q)
+    
+    (x) edge[sloped] node{$\assign$} (thisC)
+    (x) edge[sloped,below] node{$\hat{\mathtt{c3}}$} (thisC)
+    % (thisC) edge[sloped] node{$\load[1]$} (r)
+    ;
+\end{tikzpicture}
+}
+% \vspace*{-2.5ex}
+\caption{The PAG operated on by \manuLFC for the program given in \Cref{fig:motivatingExample}.}
+\label{fig:pag2}
+% \vspace*{-1ex}
+\end{figure*}

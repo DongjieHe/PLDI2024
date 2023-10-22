@@ -1,0 +1,82 @@
+ \begin{figure*}
+\centering
+\resizebox{0.635\width}{0.69\height}{
+\begin{tikzpicture}
+    \draw [draw=black!5, fill=black!5] (5.1,1.7) rectangle (11.6,0.8); % A::foo
+    \draw [draw=black!5, fill=black!5] (5.1,0.5,0) rectangle (9.6,-0.3); % B::foo
+    \draw [draw=black!5, fill=black!5] (5.1,-0.6,0) rectangle (9.6,-1.5);  % C::foo
+    \draw [draw=black!5, fill=black!5] (-10.5,1.7,0) rectangle (-3.5,0.9); % main
+    \draw [draw=black!5, fill=black!5] (-10.5,-1.5,0) rectangle (-3.5,-.8); % main
+    \draw [draw=black!5, fill=black!5] (-10.5,1.5,0) rectangle (-7.5,-1.3); % main
+    \draw [draw=black!5, fill=black!5] (-6.5,0.6,0) rectangle (2.5,-0.6); % bar
+    \node(x) {\texttt{x}};
+    \node(d)[left of =x, xshift=0.5cm] {\texttt{d}};
+    \node(D)[left of=d, xshift=1cm, yshift=.0cm] {\texttt{D1}};
+    \node(o)[left of=D, xshift=1.5cm] {\texttt{o}};
+    \node(o1)[above left of=o, yshift=-1.2cm] {\texttt{o1}};
+    \node(O1)[left of=o1, xshift=1cm] {\texttt{O1}};
+    \node(o2)[below left of=o, yshift=1.1cm] {\texttt{o2}};
+    \node(O2)[left of=o2, xshift=1cm] {\texttt{O2}};
+    \node(xc)[right of=x, xshift=-1cm] {\texttt{x\#c3}};
+    \node(a)[above left of=x,yshift=-1cm,xshift=-2cm] {\texttt{a}};
+    \node(A)[left of=a, xshift=1cm] {\texttt{A1}};
+    \node(b)[below left of=x, yshift=.8cm, xshift=-2cm] {\texttt{b}};
+    \node(B)[left of=b, xshift=1cm] {\texttt{B1}};
+    \node(thisA)[above right of=xc,xshift=2cm,yshift=-1cm] {$\texttt{this}^\texttt{A:foo()}$};
+    \node(p)[right of=thisA]{\texttt{p}};
+    \node(v)[right of=p,xshift=-1cm]{\texttt{v}};
+    \node(thisB)[right of=xc, yshift=0cm, xshift=1.2cm] {$\texttt{this}^\texttt{B:foo()}$};
+    \node(q)[right of=thisB] {\texttt{q}};
+    \node(thisC)[below right of=xc, xshift=2cm,yshift=1cm] {$\texttt{this}^\texttt{C:foo()}$};
+    \node(r)[right of=thisC]{\texttt{r}};
+    
+    \path[-stealth]
+    (O1) edge[sloped] node{$\new[\texttt{O}]$} (o1)
+    (O2) edge[sloped] node{$\new[\texttt{O}]$} (o2)
+    
+    (A) edge[sloped] node{$\new[\texttt{A}]$} (a)
+    (B) edge[sloped] node{$\new[\texttt{B}]$} (b)
+    
+    (D) edge[sloped, above] node{$\new[\texttt{D}]$} (d)
+    
+    (a) edge[sloped,bend left=25] node{\assign} (x)
+    (a) edge[sloped,bend left=25,below] node{$\hat{\mathtt{c1}}$} (x)
+    (o1) edge[sloped,bend left=10] node{\assign} (o)
+    (o1) edge[sloped,bend left=10,below] node{$\hat{\mathtt{c1}}$} (o)
+    
+    (b) edge[sloped,bend right=25] node{\assign} (x)
+    (b) edge[sloped,bend right=25,below] node{$\hat{\mathtt{c2}}$} (x)
+    (o2) edge[sloped,bend right=10] node{\assign} (o)
+    (o2) edge[sloped,bend right=10,below] node{$\hat{\mathtt{c2}}$} (o)
+    
+    (o) edge[sloped, bend right=40] node{$\store[\texttt{f}]$} (d)
+    
+    (d) edge[sloped,bend left=0] node{$\store[1]$} (x)
+    (d) edge[sloped,bend left=0,below] node{$\hat{\boxed{\mathtt{c3}}}$} (x)
+    
+    (x) edge[sloped,bend right=30] node{$\assign$} ([shift={(-.1,-.2)}]xc)
+    (x) edge[sloped,bend right=30,below] node {$\check{\boxed{\mathtt{c3}}}$} ([shift={(-.1,-.2)}]xc)
+%    (x) edge[in=60,out=120,loop,looseness=20] node{$\assign$} (x)
+%    (x) edge[in=60,out=120,loop,looseness=20,below] node{$\hat{\boxed{\mathtt{c3}}}$} (x)
+    (x) edge[sloped,bend left=30] node{$\assign$} ([shift={(-.1,.2)}]xc)
+    
+    (xc) edge[sloped,bend left=20] node{$\indispatch[\texttt{A}]$} (thisA)
+    (xc) edge[sloped,bend left=20,below] node{$\hat{\mathtt{c3}}$} (thisA)
+    (thisA) edge[sloped] node{$\load[1]$} (p)
+    (p) edge[sloped] node{$\load[\texttt{f}]$} (v)
+    
+    (xc) edge[sloped] node{$\indispatch[\texttt{B}]$} (thisB)
+    (xc) edge[sloped, below] node{$\hat{\mathtt{c3}}$} (thisB)
+    (thisB) edge[sloped] node{$\load[1]$} (q)
+    
+    (xc) edge[sloped,bend right=20] node{$\indispatch[\texttt{C}]$} (thisC)
+    (xc) edge[sloped,bend right=20,below] node{$\hat{\mathtt{c3}}$} (thisC)
+    (thisC) edge[sloped] node{$\load[1]$} (r)
+    ;
+\end{tikzpicture}
+}
+% \vspace*{-3.5ex}
+\caption{The PAG for \LFCR constructed for the program given in \Cref{fig:motivatingExample}.}
+\label{fig:pag1}
+%\vspace*{-1ex}
+\end{figure*}

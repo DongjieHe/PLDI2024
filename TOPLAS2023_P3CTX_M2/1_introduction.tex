@@ -1,0 +1,203 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Pointer analysis underpins almost all forms of other static analyses. Some representative
+applications include
+program understanding, program verification, bug detection,
+ security analysis,
+ compiler optimization, and symbolic execution. 
+ For object-oriented programs, context-sensitive pointer analyses
+are the most common class of precise pointer analyses~\cite{tan2017efficient,lhotak2003scaling,smaragdakis2011pick,jeon2018precise}.
+ Broadly speaking, 
+there are two representative abstractions
+for context-sensitivity:
+(1) \emph{$k$-callsite-sensitivity}
+\cite{shivers1991control}, which
+distinguishes the contexts of a method by its
+$k$-most-recent callsites, and (2)
+\emph{$k$-object-sensitivity} \cite{milanova2005parameterized,milanova2002parameterized},
+which 
+distinguishes the contexts of a method
+by its receiver's $k$-most-recent
+allocation sites. In the past two decades, both abstractions  have been widely used in
+whole-program pointer analyses \cite{bravenboer2009strictly,WALA2022,naik2006effective}, with object-sensitivity
+being often preferred over callsite-sensitivity  in terms of the precision/efficiency tradeoff obtained. However, a recent study \cite{JeonPOPL22}
+suggests that the converse can be true when the traditional $k$-limiting approach
+is relaxed.
+In the case of demand-driven pointer analyses, however, callsite-sensitivity
+has been exclusively used
+\cite{sridharan2006refinement,shang2012demand,yan2011demand} 
+without $k$-limiting since on-demand points-to queries
+can be answered subject to a per-query time budget.
+
+\begin{comment}
+program understanding \cite{sridharan2007thin}, bug detection \cite{naik2006effective, Liu2018PLDI, Fan2019ICSE},
+ security analysis \cite{flowdroid2014,Fan2017ISSTA, PTaint2017OOPSLA},
+ compiler optimization \cite{da2006probabilistic, sui2013query}, and symbolic execution~\cite{Trabish2018ICSE, Kapus2019FSE, Trabish2020FSE}.
+\end{comment}
+
+In this paper, we introduce the first CFL-reachability formulation of callsite-sensitive pointer analysis for object-oriented
+languages.
+Here, CFL stands for context-free language.
+We restrict ourselves to Java, since
+the underlying basic principle  applies also to other object-oriented  
+languages.
+
+Traditionally, $k$-callsite-sensitive pointer analysis (abbreviated to
+ $\kcs{k}$ (Control-Flow Analysis) \cite{shivers1991control}) for Java
+is either inclusion-based \cite{andersen1994program} or  founded on CFL reachability~\cite{reps1998program}. 
+
+On one hand, Andersen-style 
+inclusion-based formulation for   \kcs{k} \cite{kastrinis2013hybrid, thiessen2017context} has been adopted in several pointer analysis frameworks for Java
+\cite{naik2006effective,vallee2010soot,WALA2022,bravenboer2009strictly, he_et_al:LIPIcs.ECOOP.2022.30}. 
+%, e.g.,  \jchord~\cite{naik2006effective},  \soot~\cite{vallee2010soot}, \wala~\cite{WALA2022},   \doop~\cite{bravenboer2009strictly}, and\qilin~\cite{he_et_al:LIPIcs.ECOOP.2022.30}. 
+ Given a  program, its statements are modeled as  points-to set constraints,  its methods' calling contexts (abstracted by their
+ last $k$
+ callsites)  are tracked by parameterizing these constraints with context abstractions, and its call graph 
+ is often constructed on the fly in order to achieve  the best precision and efficiency possible~\cite{grove2001framework, ryder2003dimensions, lhotak2003scaling, lhotak2008evaluating, smaragdakis2011pick}.
+
+On the other hand, the
+CFL-reachability formulation for \kcs{k}~\cite{sridharan2006refinement} has also been used extensively in  understanding and developing  a wide range of pointer analysis algorithms, such as demand-driven pointer/alias analysis~\cite{sridharan2005demand, sridharan2006refinement, zheng2008demand, yan2011demand, shang2012demand}, context transformations~\cite{thiessen2017context}, 
+specification inference \cite{Bastani15PLDI},
+library-code summarization \cite{shang2012demand, tang2015summary},
+  information flow analysis \cite{li2020fast,milanova2020flowcfl},
+and selective context-sensitivity~\cite{lu2021selective,li2018precision}. 
+Given a program,  its points-to information is computed by solving a graph reachability problem over
+ a so-called \textit{pointer assignment graph} (PAG)~\cite{lhotak2003scaling}. 
+Such a CFL-reachability formulation consists of reasoning about the intersection of two CFLs, \manuCapLFC, 
+where \manuLF describes field accesses as balanced parentheses and \manuLC enforces 
+  callsite-sensitivity by matching method calls and returns as also balanced parentheses~\cite{sridharan2006refinement}. However,
+ a separate algorithm, which is formulated outside \manuLFC, is used for call graph construction (as
+ described in \Cref{sec:backgroundAndMotivation}).
+
+Compared with Andersen-style inclusion-based formulation, 
+this \manuLFC-based CFL-reachability formulation for
+specifying \kcs{k}
+suffers from two major limitations due to the lack of  a built-in call graph construction mechanism.
+First, \kcs{k} may lose precision even if it uses the most precise call graph
+for a program (built in advance or on the fly).
+%using, for example, CHA~\cite{dean1995optimization}, RTA~\cite{bacon1996fast} and VTA~\cite{sundaresan2000practical}).
+Second, any  analysis that reasons about  CFL-reachability in terms of \manuLFC will fail
+to make a connection with
+the value-flow paths traversed by a separate call graph construction
+algorithm used, and consequently, may
+make optimization decisions 
+that reduce  the precision of \kcs{k} (among others).
+
+
+\begin{comment}
+In \cite{sridharan2005demand, sridharan2006refinement}, where the callsite-based CFL reachability formulation was first proposed for handling demand-driven pointer analysis, the authors has to resort to an additional algorithm for on-fly callgraph construction. However, in a considerable part of work, algorithm-assisted on-fly construction approaches are insufficient to complete their tasks. For instance, \selectx , a recent effort for \kcs{k} \cite{lu2021selective}, performs its context-sensitivity selection analysis in a pre-analysis stage and 
+cannot rely on an expensive additional algorithm for on-fly dispatching. Consequently, \selectx suffers from a few precision losses.
+Thus, a language-built-in formulation for on-fly callgraph construction is urgently required.
+\end{comment}
+% especially in those in recent years, graph reachability plays an increasingly important role, which cannot be replaced by only specific algorithms.
+
+% In traditional callsite-based CFL formulation~\cite{sridharan2006refinement, yan2011demand}, $L_F$ only describes value flows, leaving call-graph building unmentioned, 
+% In practice, the call-graph can be created in advance by some pre-analysis (such as IFDS~\cite{}), in such way $L_F$ can describe all the pointer relationships in the program (by regarding method calls and returns as assignments).
+% But there is a loss of precision in doing so, and the precision loss depends on the difference between the call-graph given by the pre-analysis and the actual call-graph (the one which is on-fly built).
+%Of course, if the call-graph given by the pre-analysis is consistent with the actual call-graph, there is no loss of precision then, 
+%but this also means that the pre-analysis should have done the work of $L_F$ and make $L_F$ meaningless.
+
+% Alternatively, the call graph can usually be constructed on the fly, 
+% but its construction process is usually described by a specific algorithm (for example, demand-driven pointer analysis ~\cite{sridharan2005demand, sridharan2006refinement}), rather than a language like value-flow.
+
+In this paper, as  \emph{the primary contribution of this research}, we overcome these two limitations by introducing a  CFL-reachability formulation of \kcs{k}  for Java with  built-in on-the-fly call graph construction (as part of the
+same CFL-reachability formulation).
+%However, how to design a CFL-reachability formulation for callsite-based context-sensitive pointer analysis with on-fly callgraph construction being supported remains to be unknown.
+% Using graph reachability to explicitly describe on-fly call-graph building 
+%It was rarely discussed in past literals, due to its extraordinary complexity. 
+%
+% We are not aware of any earlier attempt on studying this
+% problem in the literature.
+\hl{Adapting the previous formulation used in object-sensitive pointer analysis \cite{lu2019precision, lu2021eagle} to our approach poses significant challenges and complexities, as discussed in Section \ref{paragraph:chl2} and further explored in Section \ref{sec:relatedwork}. Furthermore, an earlier attempt to address the same problem, presented in Sridharan's PhD thesis \cite{sridharan2007refinement}, falls short in providing a comprehensive solution, as will be discussed in detail in Section \ref{sec:relatedwork}.}
+\begin{comment}
+First, the CFL-reachability formulation does not have an equivalent set-constraint formulation as it is in the form of an intersection of several CFLs which has been proven to be undecidable \cite{reps2000undecidability}. Thus, attempting to obtain the CFL-reachability formulation from their corresponding set constraints by exploiting Melski-Reps reduction \cite{melski2000interconvertibility} is infeasible. Second, even we could use Melski-Reps reduction \cite{melski2000interconvertibility} to obtain a CFL-reachability formulation to track context-insensitive value flow with on-fly callgraph construction included, needless to say how complicated its form is, how to adapt it to support fully callsite-sensitivity is still a great challenge.
+\end{comment}
+% It is true that in many tasks that only calculate value-flow, the specific algorithm description is sufficient to complete these tasks, thus avoiding this problem.
+% However, in a considerable part of the work, especially in those in recent years, graph reachability plays an increasingly important role, which cannot be replaced by only specific algorithms.
+% For example
+Our formulation consists of reasoning about the intersection of three  CFLs, \capLFCR, 
+over a new PAG representation for a Java program,
+where \LF specifies not only field accesses
+as in \manuLF but also  dynamic method dispatch, \LC  enforces  callsite-sensitivity
+exactly as before \cite{sridharan2006refinement}, and  \LR supports parameter passing in the presence of built-in
+on-the-fly call graph construction.
+%ensures that the context used for parameter passing at a callsite remains unchanged  after a  CFL-reachability traversal has been performed for dispatching
+%a virtual method invoked at the callsite.  
+\hl{Theoretically, we present a novel insight by demonstrating for the first time that callsite-sensitive pointer analysis can be formulated as a particular type of context-sensitive language. Specifically, we express it as the intersection of multiple CFLs. It is important to note that not all context-sensitive languages can be expressed in this manner\cite{liu1973infinite, Latta1993phdthesis}, highlighting the uniqueness of our approach.}
+We will discuss several challenges faced in designing \LFCR
+and provide some insights for understanding our  formulation. Note that the
+ Melski-Reps reduction \cite{melski2000interconvertibility} cannot be used to convert Andersen-style
+ inclusion-based formulation for \kcs{k} into \LFCR  since  \LFCR is the intersection of three different
+ CFLs rather than just one single CFL.
+ 
+\LFCR can be applied to all the applications that benefit from
+\manuLFC.
+By formulating \kcs{k} 
+\hl{(with built-in on-the-fly callgraph construction)} % completely 
+in terms of CFL-reachability,  
+\LFCR can be potentially more useful than \manuLFC
+for several recently-studied CFL-reachability-based
+analyses:
+specification inference \cite{Bastani15PLDI},
+library-code summarization \cite{shang2012demand, tang2015summary},
+  information flow analysis \cite{li2020fast, milanova2020flowcfl}, and
+ selective context-sensitivity \cite{lu2021selective,li2018precision}. 
+  To demonstrate
+its utility,  as \emph{the secondary contribution of this research}, we introduce the first \LFCR-enabled precision-preserving pre-analysis
+ for accelerating \kcs{k} for Java with selective context-sensitivity,
+ which also serves to validate 
+ the correctness of \LFCR .
+ In contrast,
+ a recently proposed pre-analysis \cite{lu2021selective} will always lose precision as it
+ is developed 
+ based on \manuLFC~\cite{sridharan2006refinement}. 
+ %We will explain why a precision-preserving pre-analysis can be developed from \LFCR but not from \LFC.
+
+\begin{comment}
+Specifically, we have realized \tool, the first precision-preserving acceleration approach for \kcs{k}, which in
+turn proved the correctness of our CFL-reachability formulation. During our design, we have applied a similar
+over-approximation approach on CFLs as \selectx \cite{lu2021selective} to first obtain a regular language $L_R$. 
+Next, we perform context-sensitivity selection by reasoning about object reachability guided by $L_R$ and $L_C$. As a result, \tool is simple, lightweight, and very efficient due to its selection algorithm is actually a taint analysis in essence.
+\end{comment}
+% \tool applies the exactly same over-approximation approach on CFLs as \selectx \cite{lu2021selective} but achieves a dramatically poor efficiency in its context selection. We thus proposed two optimization approaches: (1) \tooll improves the selection efficiency at the cost of a negligible precision loss in main analysis by pre-excluding a ton of redundant virtual call dispatching value flows for monomorphic calls precomputed by \spark \cite{lhotak2003scaling} (a context-insensitive Andersen's analysis \cite{andersen1994program}). (2) \toolp improves the selection efficiency while still preserving precision of main analysis by further over-approximating \selectx's context selection algorithm into a taint analysis. 
+
+
+
+% In general, \toolp could accelerate \kcs{k} \OVERALLEagleCSPSPEEDUP and \tooll achieves a slightly better speedups (\OVERALLEagleCSLSPEEDUP) at the cost of a negligible precision loss. The average context selection time has also been significantly reduced from \toolPreTime seconds (for \tool) to \toolpPreTime seconds by \toolp and \toollPreTime seconds by \tooll respectively. 
+
+% In this work, we mainly discussed the necessity, complexity, and feasibility of using graph reachability to explicitly describe on-fly call-graph building,
+% and finally gave a feasible CFLs for a field-sensitive and callsite-sensitive pointer analysis including on-fly call-graph building.
+% We also present an application of it -- the precision-preserving acceleration of \kcs{k}, the experimental results of which prove its correctness and effectiveness.
+
+In summary, this paper makes the following two  contributions:
+\begin{itemize}
+    \item Our primary contribution is to introduce a CFL-reachability formulation \LFCR of
+    \kcs{k}  for object-oriented languages 
+   with on-the-fly call graph construction being built into the formulation itself (rather than done by
+   a separate call graph construction algorithm), demonstrating for the first time that callsite-sensitive pointer analysis represents a special kind of context-sensitive language that can be expressed by the intersections of several CFLs.
+    
+    \item Our secondary contribution is to introduce an \LFCR-enabled precision-preserving pre-analysis for 
+    accelerating \kcs{k} for object-oriented languages with selective context-sensitivity. 
+    Compared with two state-of-the-art pre-analyses  \cite{lu2021selective,li2018precision}, our pre-analysis 
+    enables
+better efficiency-precision trade-offs to be made in several application scenarios outlined.
+\begin{comment}    
+    Our evaluation, conducted
+in   \qilin~\cite{he_et_al:LIPIcs.ECOOP.2022.30} using 
+a set of 13 popular Java benchmarks/applications, shows that our pre-analysis
+enables  
+\kcs{k} to achieve an average speedup of 
+\OVERALLTOOLSPEEDUP while incurring  %negligible 
+small pre-analysis overheads (\toolPreTime seconds on average).
+%\tool is only \toolPreTime seconds.
+\end{comment}
+\end{itemize}
+
+The rest of this paper is organized as follows.
+\Cref{sec:backgroundAndMotivation} provides some background knowledge and motivates the
+development of \LFCR by highlighting several challenges faced in its design. \Cref{sec:CFL} introduces 
+\LFCR by explaining  how we address these challenges and providing some
+insights in understanding its design.   \Cref{sec:EagleCS}  introduces and evaluates our \LFCR-enabled  pre-analysis for accelerating
+\kcs{k}. \Cref{sec:relatedwork}
+ discusses the related work.  \Cref{sec:conclusion} concludes the paper.

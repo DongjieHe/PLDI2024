@@ -1,0 +1,63 @@
+This is BibTeX, Version 0.99d (TeX Live 2022)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main-acmsmall-submission.aux
+The style file: ACM-Reference-Format.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Database file #1: reference.bib
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Warning--no number and no volume in he2022selecting
+Warning--page numbers missing in both pages and numpages fields in he2022selecting
+Warning--no number and no volume in he2023ifds
+Warning--page numbers missing in both pages and numpages fields in he2023ifds
+Warning--empty publisher in kronrod1970economic
+Warning--empty address in kronrod1970economic
+Warning--empty school in Latta1993phdthesis
+Warning--empty address in sridharan2007refinement
+You've used 65 entries,
+            5981 wiz_defined-function locations,
+            1849 strings with 30411 characters,
+and the built_in function-call counts, 76041 in all, are:
+= -- 9780
+> -- 2080
+< -- 0
++ -- 703
+- -- 741
+* -- 5064
+:= -- 7011
+add.period$ -- 331
+call.type$ -- 65
+change.case$ -- 443
+chr.to.int$ -- 60
+cite$ -- 73
+duplicate$ -- 7141
+empty$ -- 4957
+format.name$ -- 942
+if$ -- 18927
+int.to.chr$ -- 7
+int.to.str$ -- 1
+missing$ -- 273
+newline$ -- 558
+num.names$ -- 452
+pop$ -- 2782
+preamble$ -- 1
+purify$ -- 953
+quote$ -- 0
+skip$ -- 2674
+stack$ -- 0
+substring$ -- 5780
+swap$ -- 819
+text.length$ -- 19
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 1586
+warning$ -- 8
+while$ -- 460
+width$ -- 0
+write$ -- 1350
+(There were 8 warnings)

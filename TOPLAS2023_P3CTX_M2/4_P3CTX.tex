@@ -1,0 +1,636 @@
+\section{\texorpdfstring{\LFCR}~: An Application}
+\label{sec:EagleCS}
+
+% 1. over-approximate LF as Selectx, and highlight the limitations. \\
+% 2. Optimization 1: monocall modeled as usual (i.e., Manu's CFL). only polycall modeled as new LF. \\
+%     not guarantee preserving precision, fast. time complexity: |E|D**3 \\
+% 3. Optimization 2: further approximation. preserving precision, slightly slow. complexity: |E|. \\
+
+As the secondary contribution of this research, we
+demonstrate the utility of \LFCR by considering one significant application (among
+the list of potential applications discussed in \Cref{sec:introduction}). We introduce
+the first
+ \LFCR-enabled pre-analysis,  \tool,  for accelerating \kcs{k} (implemented as a whole-program
+ analysis in terms of the rules in 
+\Cref{rule:cfapta}) with selective context-sensitivity while always preserving its
+precision. This also serves to validate the correctness of \LFCR.
+In contrast, \selectx, a recently proposed pre-analysis developed based on \manuLFC \cite{lu2021selective}, is not precision-preserving.
+%  and its two 
+% two optimizations, \tooll (\Cref{subsec:tooll}) and \toolp (\Cref{subsec:toolp}). 
+% We first introduce \tool, a precision-preserving context selection approach by following a similar approximation as \selectx \cite{lu2021selective} (\Cref{subsec:tool}). 
+
+\subsection{Selective Context-Sensitivity}
+
+\hl{Context-sensitivity is vital for enhancing pointer analysis precision. Blindly applying context sensitivity to all program variables and objects is time-consuming and provides limited precision benefits due to the presence of non-precision-critical elements. To address this, selective context-sensitivity focuses on applying context-sensitivity only to a pre-selected subset of precision-critical program variables and objects, while analyzing others in a context-insensitive manner.
+Several pre-analysis techniques have been proposed to support selective context-sensitive pointer analysis by pre-selecting a subset of program variables and objects \cite{hassanshahi2017efficient, jeong2017data, jeon2018precise, li2018precision, li2020principled, lu2021selective, He2021Turner, he2021context}. However, misclassification of precision-critical variables and objects in these techniques can lead to precision loss in the main pointer analysis.
+To address this issue, we introduce \tool, the first precision-preserving pre-analysis technique based on \LFCR for identifying precision-critical variables and objects, supporting selective context-sensitivity in \kcs{k} while maintaining analysis precision.}
+
+We have developed \tool by following the same basic principle introduced in 
+\cite{lu2021selective} for developing \selectx. For more technical details,
+we refer to \cite{lu2021selective}.
+
+\subsubsection{CFL-Reachability-Guided Selections}
+\label{subsec:condition}
+
+The basic idea in applying \manuLFC to develop \selectx \cite{lu2021selective} is simple.
+Let $p_{O, n, v}$ be a $\flowsto$ path   operated by \manuLFC
+from some object $O$ to some variable $v$, where $n$ is a variable/object accessed in
+a method $\mathtt{M}$. Let
+ $p_{O, n}$ be its sub-path from $O$ to $n$ and $p_{n, v}$ its sub-path from
+ $n$ to $v$. 
+  Then   $n$ requires  context-sensitivity (to prevent \kcs{k} from
+  potentially losing
+  precision)
+  \textit{only if} the following three conditions are satisfied:
+ %Then  \kcs{k} should analyze $n$  context-sensitively at no loss of  precision \textit{only if}: 
+\begin{equation}
+% \footnotesize
+\label{eqn:cflcscondition}
+\begin{split}
+   % \exists p_{o, n, v}: 
+  \text{\selconOne}:  & ~L_{F} (p_{O, n, v}) \in L_{F} \\[1ex]
+  \text{\selconTwo}:                      & \wedge L_C(p_{O, n}) \in L_C \wedge L_C(p_{n, v}) \in L_C \\[1ex]  
+  \text{\selconThree}:                        &  \wedge L_C^{\entry}(p_{O, n}) \neq  \epsilon \wedge L_C^{\exit}(p_{n, v}) \neq \epsilon
+%                         &  \wedge L_C^{\entry}(p_{o, n}) \neq  L_C^{\exit}(p_{n, v}) \\
+\end{split}
+\end{equation}
+where $ L_C^{\entry}$ and  $L_C^{\exit}$ are defined in \Cref{subsubsec:newLR}.
+In this case, 
+ $O$ from outside $\mathtt{M}$ flows into $n$  
+   along $p_{O,n}$ context-sensitively
+  and  $n$  flows out of  $\mathtt{M}$ into $v$
+along $p_{n,v}$   context-sensitively, via $\mathtt{M}$'s
+ parameters
+(or return variable) along each path. 
+Note that $p_{O, n, v}$ itself is not required to be an \manuLFC-path. 
+
+
+\selectx will select  $n$ to be
+context-sensitive \textit{if} \selconOne -- \selconThree hold. By interpreting these conditions as
+being sufficient (rather than just necessary), \selectx is conservative as it may
+select some $n$ to be context-sensitive even though \kcs{k} loses no precision
+if it is analyzed context-insensitively.
+
+
+
+\begin{comment}
+\begin{equation}
+  \centering
+\label{eq:ParmPathI}
+\begin{tabular}{l} \scriptsize
+$\texttt{d}\xrightarrow[\hat{\boxed{\texttt{c3}}}]{\store[1]}\texttt{x}
+\xrightarrow[\check{\texttt{c1}}]{\iassign}\texttt{a}
+\xrightarrow{\inewfield{\texttt{A}}}$\commentfont{A1}$\xrightarrow{\new[\texttt{A}]}\texttt{a}\xrightarrow[\hat{\texttt{c1}}]{\assign}\texttt{x} \xrightarrow[\check{\boxed{\texttt{c3}}}]{\assign} \texttt{x\#c3}$\\\scriptsize
+$\xrightarrow[\hat{\texttt{c3}}]{\indispatch[\texttt{A}]}\texttt{this}^\texttt{A:foo()}\xrightarrow{\load[1]}\texttt{p}$
+\end{tabular}
+\end{equation}
+
+\begin{equation}
+  \centering
+\label{eq:newPathII}
+\begin{tabular}{l} \scriptsize
+\commentfont{O2}$\xrightarrow{\new[\texttt{O}]}
+\texttt{o2}\xrightarrow[\hat{\mathtt{c2}}]{\assign}
+\texttt{o} \xrightarrow{\storefield{f}} \texttt{d}
+\xrightarrow{\inewfield{\texttt{D}}}$ \commentfont{D1} 
+$ \xrightarrow{\new[\texttt{D}]} ~$\Cref{eq:ParmPathI}
+$
+    \xrightarrow{\load[\texttt{f}]} \texttt{v}
+$
+\end{tabular}
+\end{equation}
+\end{comment}
+
+% Here, for a \emph{realizable} path $p$, we write $L_C^{\exit}(p)$
+% for the prefix of $L_C(p)$ derived by \exit and $L_C^{\entry}(p)$ for the suffix of $L_C(p)$ derived by \entry. 
+
+% To understand its necessity, we consider a fixed path $p_{o, n, v}$ where $L_{F} (p_{o, n, v}) \in L_{F} \wedge L_C(p_{o, n}) \in L_C \wedge L_C(p_{n, v}) \in L_C$ holds. If $L_C^{\entry}(p_{o, n}) \neq  L_C^{\exit}(p_{n, v})$ and both are not \emptyctx, then $o$ may spuriously flow to $v$
+% when $n$ is context-insensitive but could not flow to $v$ when $n$ is context-sensitive. 
+% To understand its non-sufficiency, we note that the same object may flow to a variable along several \flowsto-paths.
+
+%\paragraph{Why Does \selectx Cause \kcs{k} to Lose Precision?}
+
+However, \selectx may  cause \kcs{k} to lose precision.
+Consider  our motivating example given in
+\Cref{fig:motivatingExample}, 
+for which whether  \texttt{v}  
+points to \commentfont{O2} spuriously or not
+hinges on whether \texttt{d}, \texttt{o}, \texttt{x}, and
+\commentfont{D1} in \texttt{bar()} (containing a virtual callsite
+\texttt{x.foo(d)})
+are analyzed context-sensitively or not. By reasoning about \manuLFC that
+operates on the  PAG  given in 
+\Cref{fig:pag2} for this example,
+\selectx will select all the four to be
+context-insensitive (causing \texttt{v}  to 
+point to \commentfont{O2}), as none can flow out of 
+\texttt{bar()} via its parameter \texttt{x} (which is also the 
+receiver variable of \texttt{x.foo(d)})
+in this PAG.
+%operated by \manuLFC (as revealed by 
+% \Cref{eq:LFCPathCGPreciseI} and
+%\Cref{eq:LFCPathCGPreciseII} for \texttt{d}, \texttt{o},   and
+%\commentfont{D1} and the paths for \texttt{x} that are not given in the paper but
+%can be constructed easily).
+Thus,  \selconThree fails to hold. In \manuLFC, which uses a separate algorithm 
+for call graph construction, its PAG representation contains no dispatch paths that allow  these
+ four variables/objects to flow outside \texttt{bar()} via  \texttt{x} as shown.
+
+% in the PAG (\Cref{fig:pag2}), \texttt{x} is disconnected with the value-flows  inside \texttt{bar}.
+ 
+ \tool will always be precision-preserving as it leverages
+ \selconOne -- \selconThree by  substituting
+ \LF for \manuLF, with \LFC
+ operating on a new PAG representation including explicitly the dispatch paths for all
+ virtual callsites in the program (as discussed below in
+ \Cref{subsec:regularization}).
+ Consider our motivating example again, with its new
+  PAG depicted in \Cref{fig:pag1} for supporting built-in
+  call graph construction.
+ In \LF, parameter passing for \texttt{d} at  \inline{x.foo(d)} 
+is  CFL-reachability-related to its receiver variable \texttt{x}. 
+Let $p_{{\commentfont{O1}},n,\texttt{v}}$ be
+ the path
+ in \Cref{eq:ex-patho1-to-v} (which happens to be an \LFC-path).
+Let $n\in \{
+\texttt{d}, \texttt{o}, \texttt{x}, 
+\commentfont{D1}
+\}$.
+\tool  will select every $n$ to be context-sensitive,
+since (1) $p_{\commentfont{O1},n,\texttt{v}}$ is an \LF-path
+(\selconOne), (2) both $p_{\commentfont{O1},n}$ and
+$p_{n,\texttt{v}}$ are \LC-paths (\selconTwo),  and (3)
+$\LC^\entry(p_{\commentfont{O1},n})=\hat{\texttt{c1}}\neq \epsilon$ and
+$\LC^\exit(p_{n,\texttt{v}})=\check{\texttt{c1}}\neq \epsilon$
+(\selconThree).
+%This means that
+%some object  from outside  \texttt{bar()}  flows into $n$ under $\hat{\texttt{c1}}$ and  $n$ also flows out of \texttt{bar()}  under $\check{\texttt{c3}}$ via \texttt{x}. 
+
+\begin{comment}
+Consider  our motivating example 
+(\Cref{fig:motivatingExample}), for which whether \texttt{v} 
+points to \commentfont{O2} spuriously or not
+hinges on whether \texttt{d}, \texttt{o}, \texttt{x}, and
+\commentfont{D1} in \texttt{bar()} are analyzed context-sensitively or not.
+\tool  will select all the four to be context-sensitive.
+In \LFCR, parameter passing for \texttt{d} at  \inline{x.foo(d)} 
+is  CFL-reachability-related to \texttt{x}. Thus,
+\selconOne -- \selconThree hold, as revealed by one \LFCR-path given in \Cref{eq:ex-patho1-to-v}, since
+some object (\commentfont{O1}) from outside  \texttt{bar()}  flows into the four variables/objects under $\hat{\texttt{c1}}$ and 
+they also flow out of \texttt{bar()} (into \texttt{v}) under
+$\check{\texttt{c3}}$ via \texttt{x}. However, \selectx will select 
+the four variables/objects to be
+context-insensitive, as \selconOne -- \selconThree fail to hold,
+causing \kcs{k} to conclude that \texttt{v} 
+points to \commentfont{O2} spuriously. In \manuLFC, which uses a separate algorithm 
+for call graph construction, the value-flow paths that allow  these
+ four variables/objects to flow outside \texttt{bar()} via  \texttt{x}
+ are  missing (\Cref{fig:MissingCGValueFlow}).
+\end{comment}
+ 
+% \begin{equation}
+%   \centering
+% \label{eq:LFCPathOfO2}
+% \scriptsize
+% \begin{tabular}{l} 
+% \commentfont{O2}$\xrightarrow{\new}
+% \texttt{o2}\xrightarrow[\hat{\mathtt{c2}}]{\assign}
+% \texttt{o} \xrightarrow{\store[f]} \texttt{d}
+% \xrightarrow{\inew}$ \commentfont{D} 
+% $ \xrightarrow{\new} \texttt{d} \xrightarrow[\hat{\boxed{\mathtt{c3}}}]{\store[1]} \texttt{x} 
+% $ \\
+% $   \xrightarrow[\check{\mathtt{c1}}]{\iassign} \texttt{a} \xrightarrow[]{\inew}$ \commentfont{A} $ \xrightarrow{\typefound[A]} $ \commentfont{A} $
+%     \xrightarrow{\new} \texttt{a} \xrightarrow[\hat{\mathtt{c1}}]{\assign} \texttt{x} 
+% $ \\ 
+% $
+%     \xrightarrow[\check{\boxed{\mathtt{c3}}};\hat{\mathtt{c3}}]{\indispatch[A]} \mathtt{this}^{\mathtt{A:foo}}
+%     \xrightarrow{\load[1]} \texttt{p}
+%     \xrightarrow{\load[f]} \texttt{v}
+% $
+% \end{tabular}
+% \end{equation}
+
+\begin{comment}
+We have $L_C^{\entry}(p_{{\color{purple}\mathtt{O2}}, \mathtt{d}}) = [\hat{\mathtt{c2}}]$ and  $L_C^{\exit}(p_{\mathtt{d}, \mathtt{v}}) = [\check{\mathtt{c1}}]$, which satisfy \Cref{eqn:cflcscondition}. Thus,
+\texttt{d} should be analyzed context-sensitively. For similar reasons, \texttt{o}, \commentfont{D1} and \texttt{x} are all precision-critical. In contrast, the path $p_{{\color{purple}\mathtt{O2}}, d, v}$ in the traditional CFL-reachability formulation \cite{sridharan2005demand, sridharan2006refinement} given in \Cref{eq:LFCPathCGPreciseII} shows $L_C^{\entry}(p_{{\color{purple}\mathtt{O2}}, \mathtt{d}}) = [\hat{\mathtt{c2}}]$ but  $L_C^{\exit}(p_{\mathtt{d}, \mathtt{v}}) = \emptyctx$, which do not satisfy \Cref{eqn:cflcscondition}. As a result, \selectx \cite{lu2021selective}, the technique based on the traditional formulation, could not preserve precision as it will analyze 
+\texttt{d}, \texttt{o}, \commentfont{D1} and \texttt{x} context-insensitively. 
+\end{comment}
+
+\subsubsection{Regularization}
+\label{subsec:regularization}
+To make \tool as lightweight as possible so that we can efficiently make context-sensitivity selections without losing the performance benefits obtained from a subsequent main pointer analysis, we have decided to keep \LC unchanged
+as done in several earlier pre-analyses \cite{lu2019precision, lu2021eagle, lu2021selective} but regularize \LF and \LR. We first regularize \LR to $L_R^r$ as follows:
+\begin{equation}
+\label{eqn:newLRr}
+\footnotesize
+\begin{tabular}{rcl}
+$\recoveredctx$ & $\longrightarrow$ & $\recoveredctx~\hat{c} \mid \recoveredctx~\check{c} \mid \recoveredctx~\hat{\boxed{c}}\mid \recoveredctx ~ \check{\boxed{c}}\mid \epsilon$
+\end{tabular}
+\end{equation}
+As a result, we have $L_D \cap L_C \cap L_R^r = L_D \cap L_C = L_{DC}$. By  noting
+further  that the boxed edge labels in $\LR^r$ (i.e.,
+$\hat{\boxed{c}}$ and $\check{\boxed{c}}$)
+are irrelevant to context-sensitivity selections and the regular entry/exit context labels in $\LR^r$ (i.e., $\hat{c}$ and $\check{c}$) have already been included in 
+\LC, we conclude that
+ $\LR^r$ (i.e., $\LR$) can be ignored safely (or conservatively).
+As $\LFC \supseteq \LFCR$ (i.e., \LFC  captures all the possible value-flows that are captured by
+\LFCR for a given program) according to
+Lemma~\ref{thm:lfc-imprecise}, it suffices to use \LFC in place of \manuLFC
+in \Cref{eqn:cflcscondition} in developing our precision-preserving pre-analysis. 
+%\hl{Second, the boxed labels in $\LR^r$ are irrelevant to context-sensitivity selections and the regular context labels in $\LR^r$ have already been included in \LC, suggesting that $\LR^r$ can be safely  ignored. }
+Like the \manuLFC-reachability problem, the \LFC-reachability problem is also
+ undecidable \cite{reps2000undecidability}. In this work, we follow  \cite{lu2021selective} to first regularize $\LF$ into $\LG$, and consequently,
+ over-approximate \LFC to obtain \capLGC. In
+ \Cref{subsec:tool}, we will give an  algorithm to verify \selconOne -- \selconThree efficiently by using
+ \LGC.
+ 
+
+% It is straightforward to regularize \LF into \LG, a regular language used in
+% developing our \tool pre-analysis (described in Section 4), by following
+% the same basic principle  described in [Lu et al. 2021b] (paper [Lu et al. 2021b] cited in the main document).
+%\cite{lu2021selective}.
+
+% We start with $L_0=\LF$, where $\LF$ is given in
+% Eq. (8) but duplicated below for convenience:
+% % we present a derivation of our \LF language to the regularized $L_R$ language.
+% %\Cref{eqn:newL0} given below is our \LF language denoted  here.
+% \begin{equation}
+% \label{eqn:newL0}
+% \begin{tabular}{rcl}
+% $\flowsto$ & $\longrightarrow$ & $\new[\texttt{t}]~(\flows~|~\indispatch[\texttt{t}])^*$ \\
+% $\flows$ & $\longrightarrow$ & $\assign \mid \store[\texttt{f}] \ \alias \ \load[\texttt{f}]$\\ % \mid \store[i] \ \alias \ \load[i] \\
+% $\alias$ & $\longrightarrow$ & $\iflowsto ~ \flowsto$ \\
+% $\iflowsto$ & $\longrightarrow$ & $(\iindispatchfield{t}~|~\iflows)^*~\inew[\texttt{t}]$ \\
+% $\iflows$ & $\longrightarrow$ & $\iassign \mid \iloadfield{\texttt{f}} \ \alias \ \istorefield{\texttt{f}}$ \\ %\mid \iloadfield{i} \ \alias \ \istorefield{i} \\
+% \end{tabular}
+% \end{equation}
+
+
+
+We start with $L_0=\LF$. We first over-approximate $L_0$ by disregarding its field-sensitivity requirement 
+and thus obtain 
+$L_1$ given  below:
+\begin{equation}
+\label{eqn:newL1}
+\begin{tabular}{rcl}
+$\flowsto$ & $\longrightarrow$ & $\new~(\flows~|~\indispatch)^*$ \\
+$\flows$ & $\longrightarrow$ & $\assign \mid \store \ \iflowsto ~ \flowsto \ \load$ \\
+$\iflowsto$ & $\longrightarrow$ & $(\iindispatch~|~\iflows)^*~\inew$ \\
+$\iflows$ & $\longrightarrow$ & $\iassign \mid \iload \ \iflowsto ~ \flowsto \ \istore$  \\
+\end{tabular}
+\end{equation}
+
+In the absence of field-sensitivity,  a $\indispatch$ ($\iindispatch$) edge behaves just
+like an  \assign ($\iassign$) edge and can thus be interpreted this way. As a result, we 
+obtain $L_2$ below:
+\begin{equation}
+\label{eqn:newL2}
+\begin{tabular}{rcl} 
+$\flowsto$ &  $\longrightarrow$ & $\new ~ \flows^*$ \\
+$\iflowsto$ & $\longrightarrow$ & $\iflows^* ~ \inew$ \\
+$\flows$  & $\longrightarrow$ & $\assign \mid  \store \ \iflowsto\ \flowsto \ \load$ \\
+$\iflows$ & $\longrightarrow$ & $\iassign \mid \iload \ \iflowsto\ \flowsto \ \istore$\\
+\end{tabular}
+\end{equation}
+
+Our approximation goes further by treating a $\load$ ($\iload$) edge as also an \assign ($\iassign$). As a result, we will no longer require a \store ($\iload$) edge
+to be matched by
+a \load ($\istore$) edge. This will give rise to $L_3$ below:
+\begin{equation}
+\label{eqn:newL3}
+\begin{tabular}{rcl} 
+$\flowsto$ & $\longrightarrow$ &  $\new ~ \flows^*$ \\
+$\iflowsto$ &  $\longrightarrow$ & $\iflows^* ~ \inew$ \\
+$\flows$ &  $\longrightarrow$ & $\assign \mid  \store \ \iflowsto\ \flowsto$\\
+$\iflows$ &  $\longrightarrow$ & $\iassign \mid \iflowsto\ \flowsto \ \istore$
+\end{tabular}
+\end{equation}
+
+Finally, we obtain $\LG=L_4$ given below by
+no longer distinguishing a \store edge from its inverse, $\istore$ edge, so that we can
+represent both types of edges as a \store edge:\\
+\begin{equation}
+\label{eqn:newLR}
+\begin{tabular}{rcl} 
+$\flowsto$ &  $\longrightarrow$ & $\new ~ \flows^*$ \\
+$\iflowsto$ & $\longrightarrow$ & $\iflows^* ~ \inew$ \\
+$\flows$ & $\longrightarrow$ & $\assign \mid  \store \ \iassign^* ~ \inew\ \new$ \\
+$\iflows$ & $\longrightarrow$ & $\iassign \mid \inew \ \new ~ \assign^* \ \store$ 
+\end{tabular}
+\end{equation}
+
+\begin{lem}
+    \label{thm:LRsubsumeLF}
+    $\LF \subseteq \LG$.
+\end{lem}
+\begin{proof}
+    Follows  from the fact that $L_i \subseteq L_{i+1}$. 
+\end{proof}
+
+ 
+%  The grammar for defining \LG is given as follows:
+% \begin{equation}
+% \label{eqn:newLR}
+% % \footnotesize
+% \begin{tabular}{rcl} 
+% $\flowsto$ & $\longrightarrow$  & $\new ~ \flows^*$ \\[1ex]
+% $\iflowsto$ & $\longrightarrow$  & $\iflows^* ~ \inew$ \\[1ex]
+% $\flows$ & $\longrightarrow$  & $\assign \mid  \store \ \iassign^* ~ \inew\ \new$ \\[1ex]
+% $\iflows$ & $\longrightarrow$  & $\iassign \mid \inew \ \new ~ \assign^* \ \store $
+% \end{tabular}
+% \end{equation}
+
+% Several over-approximations are made. 
+% First, \LG no longer enforces field
+% sensitivity. Second, \LG regards a $\reg{load}$ or $\reg{dispath}$
+% edge conservatively as  an $\reg{assign}$ edge. Finally, \LG no longer distinguishes
+% a  $\store$ edge from  its inverse, $\istore$,  and represents both  as a 
+% $\store$ edge.  
+
+While
+ \LG is identical to $L_R$ regularized from \manuLF  in \selectx
+ \cite{lu2021selective}, our  PAG  representation (\Cref{fig:newcflpag}), which makes all
+ dynamic dispatch paths explicitly, 
+differs
+ fundamentally  from the one operated by \manuLFC
+(\Cref{fig:manucflpag}).
+This ensures that \tool is precision-preserving even though
+\selectx is not.
+
+\begin{comment}
+Given $L_{RC} = L_R \cap L_C$, the necessary condition in \Cref{eqn:cflcscondition} can now be weakened as follows:
+\begin{equation}
+\label{eqn:cflcsconditionLR}
+\begin{split}
+    \exists p_{o, n, v}: & L_{R} (p_{o, n, v}) \in L_{R} \\
+                         & \wedge L_C(p_{o, n}) \in L_C \wedge L_C(p_{n, v}) \in L_C \\  
+                          &  \wedge L_C^{\entry}(p_{o, n}) \neq  \emptyctx \wedge L_C^{\exit}(p_{n, v}) \neq \emptyctx 
+                        %  &  \wedge L_C^{\entry}(p_{o, n}) \neq  L_C^{\exit}(p_{n, v}) \\
+\end{split}
+\end{equation}
+We no longer require $L_C^{\entry}(p_{o, n}) \neq  L_C^{\exit}(p_{n, v})$ as long as they are not \emptyctx.  This simplification would make verification more easier while achieving almost similar verification effect.
+\end{comment}
+
+Let $G=(N,E)$ be the PAG of a program. 
+We use Andersen's algorithm \cite{andersen1994program} instead of CHA \cite{dean1995optimization} 
+to build its  call graph  in order to sharpen the precision of \tool.
+
+% \subsection{\tooll: Non-precision-preserving Optimization}
+% \label{subsec:tooll}
+%\subsection{\tool}
+%\label{subsec:tool}
+
+
+\begin{figure}[t]
+\centering
+%\hspace*{-3ex}
+\resizebox{1\width}{1\height}{
+\begin{tikzpicture}
+    \node[state, initial, minimum size=12mm, fill=black!5] (o) {$\mathcal{O}$};
+    \node[state, below left of=o, yshift=0cm, minimum size=12mm, fill=black!5] (vp) {$\iflows$};
+    \node[state, accepting, below right of=o, yshift=0cm, minimum size=12mm, fill=black!5] (vf) {$\flows$};
+
+    \path 
+    (o) edge[sloped] node{\new} (vf)
+    (vp) edge[sloped] node{$\inew$} (o)
+    (vf) edge[sloped,in=30,out=60,loop] node{\assign} (vf)
+    (vp) edge[sloped,in=120,out=150,loop] node{$\iassign$} (vp)
+    (vf) edge[above] node{\store} (vp)
+    (vf) edge[dashed, bend left,above] node{\baltrans} (vp)
+
+    ;
+\end{tikzpicture}
+}
+%\vspace*{-1ex}
+\caption{A DFA  for accepting \LG. }
+%\vspace*{-1ex}
+\label{fig:DFA}
+\end{figure}
+
+
+We use a simple DFA  shown in \Cref{fig:DFA} designed to
+ accept \LG exactly. \tool  runs inter-procedurally  
+in linear time of the number of the PAG edges in $G$. 
+To deal with \LC, we make use of
+ summary edges added into the PAG (facilitated by the dotted transition labeled as 
+\baltrans).
+
+%In our PAG, the inter-context edges only connect with the \texttt{this} variables, which makes the dotted summary edges , 
+
+\begin{comment}
+The DFA is defined as a quintuple $\mathcal{A} = (Q, \Sigma, \delta, s, e)$, where $Q = \{\mathcal{O}, \flows, \iflows\}$ is the set of states,  $\Sigma=\{\new, \inew,  \assign, \iassign, \store\}$ is the alphabet, $\delta: Q \times \Sigma \mapsto Q$ is the 
+state transition function, $s = \mathcal{O}$ is the start state, and $e = \flows$ is the accepting state respectively. 
+For all objects in PAG, they always stay only in state $\mathcal{O}$. However, a variable \texttt{x} in PAG could be either in state \flows when it participates in the computation of \flowsto into the variable or state $\iflows$ when it participates in the computation of $\iflowsto$ from the variable. 
+\end{comment}
+
+
+\subsubsection{\tool}
+\label{subsec:tool}
+
+We follow \cite{He2021Turner} to develop a simple algorithm to verify \selconOne -- \selconThree efficiently 
+based on two properties that can be easily deduced from the DFA given in 
+\Cref{fig:DFA} as stated below.
+
+Let $Q = \{\mathcal{O}, \flows, \iflows\}$ be the set of states in the DFA
+and
+$\delta: Q \times \Sigma \mapsto Q$  be the underlying 
+state transition function. 
+Given a PAG edge $n_1 \xrightarrow{\ell} n_2 \in E$ in $G$ with 
+  its state transition $\delta(q_1, \ell) = q_2$, we define $(n_1, q_1) \onesteptran (n_2, q_2)$ 
+as a one-step transition.  The transitive closure of $\onesteptran$, denoted by $\transitivetran$, represents a multiple-step transition. {Any multiple-step transition from $\mathcal{O}$ to $\flows$ and that from $\iflows$ 
+  to $\mathcal{O}$ represent $\flowsto$ and $\iflowsto$
+  in \Cref{eqn:newLR}}, respectively. As $\flowsto$ and $\iflowsto$  in
+$\LG$ are symmetric, the following two properties about this DFA are immediate:
+\begin{itemize}[leftmargin=*]
+    \item \propo.
+  Let $O$ be an object created in  a method $\mathtt{M}$. Then
+  the following  always holds:
+% \centerline
+\begin{equation*}
+{
+    \csabstraction{\texttt{this}^\mathtt{M}}{\flows}  \transitivetran   \csabstraction{O}{\mathcal{O}}  \iff 
+	\csabstraction{O}{\mathcal{O}}   \transitivetran  \csabstraction {\texttt{this}^\mathtt{M}}{\iflows}
+}
+\end{equation*}
+   \item \propv.
+Let $v$ be a variable defined in a method $\mathtt{M}$. Then the following
+always holds:
+% {
+%     $\csabstraction{\texttt{this}^m}{\flows}\! \transitivetran\! \csabstraction{v}{\flows}
+%     \transitivetran \csabstraction{\texttt{this}^m}{\iflows}\!\! \iff \!\!
+% 	\csabstraction{\texttt{this}^m}{\flows} \!\transitivetran\!
+% 	\csabstraction{v}{\iflows} \transitivetran
+% 	\csabstraction{\texttt{this}^m}{\iflows}$.
+% }
+\begin{equation*}
+{
+    \csabstraction{\texttt{this}^\mathtt{M}}{\flows}  \transitivetran  \csabstraction{v}{q}
+   \iff  
+	\csabstraction{v}{\overline{q}} \transitivetran
+	\csabstraction{\texttt{this}^\mathtt{M}}{\iflows}
+}
+\end{equation*}
+where $q \in \{\flows, \iflows\}$
+	(since $v$ is a variable).
+\end{itemize}
+
+To handle static callsites (static methods) uniformly as virtual callsites (virtual methods), we assume that 
+a
+static callsite is invoked on a (unique) dummy receiver object. Thus, in our
+PAG representation for a program (constructed according to the rules given in \Cref{fig:newcflpag}), passing arguments and receiving return values
+for a method 
+will all flow through its ``\texttt{this}'' variable.
+
+ \tool can therefore verify
+\selconOne -- \selconThree efficiently as follows. To verify \selconOne in \Cref{eqn:cflcscondition}, where \manuLF is now replaced by \LG, 
+we do not have to start from an object to track its $\flowsto$ paths. 
+For each method,
+we can start from 
+its ``$\texttt{this}$'' variable  by assuming 
+ reasonably and over-approximately that there always exists some object $O$ that can 
+ flow into it.
+ To verify \selconTwo, we take  advantage of summary edges as in
+ \cite{lu2021selective} to verify the
+ balanced-parentheses property in \LC-paths.
+ To verify \selconThree, we check if there exists $ q \in Q$ such that
+ the following holds:
+% \setlength{\abovedisplayskip}{1ex}
+% \setlength{\belowdisplayskip}{1ex}
+\begin{equation}
+\label{eq:S-C3}
+    \csabstraction{\texttt{this}^\mathtt{M}}{\flows} \transitivetran \csabstraction{n}{q} \transitivetran \csabstraction{\texttt{this}^\mathtt{M}}{\iflows}
+\end{equation}
+% \hspace*{-1.33ex}
+where $\mathtt{M}$ is the containing method of $n$. This implies that 
+ $n$ lies  on an \LG-path collecting some values coming from outside $\mathtt{M}$ via $\texttt{this}^\mathtt{M}$ 
+ and pumping them out of $\mathtt{M}$ via $\texttt{this}^\mathtt{M}$. 
+
+
+
+\begin{comment}
+\begin{theorem} \label{theorem:flowO}
+Let $o$ be an object created in method $m$, then
+    $\csabstraction{\texttt{this}^m}{\flows} \transitivetran \csabstraction{o}{\mathcal{O}} \iff
+	\csabstraction{o}{\mathcal{O}} \transitivetran \csabstraction{\texttt{this}^m}{\iflows}$.
+\end{theorem}
+
+\begin{theorem} \label{theorem:flowV}
+Let $v$ be a variable defined in method $m$, then 
+    $\csabstraction{\texttt{this}^m}{\flows} \transitivetran \csabstraction{v}{\flows}
+    \transitivetran \csabstraction{\texttt{this}^m}{\iflows} \iff$ \linebreak
+	$\csabstraction{\texttt{this}^m}{\flows} \transitivetran
+	\csabstraction{v}{\iflows} \transitivetran
+	\csabstraction{\texttt{this}^m}{\iflows}$.
+\end{theorem}
+\end{comment}
+% \begin{proof}
+%     Lemmas~\ref{lemma:startend} and~\ref{lemma:endstart}.
+% \end{proof}
+
+Let $R:Q \mapsto \wp(N)$ return 
+the set of nodes in $G$ reached at a  state $q \in Q$. Then verifying \selconThree, i.e., checking \Cref{eq:S-C3} is equivalent to checking whether the following condition holds or not:
+\begin{equation}
+\label{eqn:cflcsconditionFinal}
+\begin{split}
+    n \in R(\mathcal{O}) \quad \vee \quad  n \in R(\flows) \cap R(\iflows)
+\end{split}
+\end{equation}
+The first disjunct says that if
+an object $n$ is in $R(\mathcal{O})$, then
+\Cref{eq:S-C3} holds due to \propo.  Its second disjunct says that
+if a variable $n$ is in  $ R(\flows) \cap R(\iflows)$, then \Cref{eq:S-C3} holds (due to \propv).
+
+
+\Cref{rule:toolrule} gives our algorithm for performing our \tool pre-analysis
+in terms of three rules. Essentially, \tool computes $R$ by conducting a simple inter-procedural reachability analysis in $G$. In \Cref{rule:toolrule}, $R^{-1}: N \mapsto \wp(Q)$, which returns the set of reachable states for a node in $G$, is the inverse  of $R$.
+For
+the three rules,
+\rulename{F-Init} does the initializations as needed,  \rulename{F-Propa} computes the reachable states for each node iteratively, and finally, \rulename{F-Sum} performs a standard context-sensitive summary for a callsite invoking $\mathtt{M}$~\cite{reps1995precise} by 
+adding a summary edge
+$n_1\xrightarrow[]{\baltrans}n_2$ in $G$ to capture   
+inter-procedural reachability across the callsite (to avoid re-computing
+the same reachability information unnecessarily for the same callsite).
+
+\begin{figure}[t]
+\centering
+% \begin{adjustbox}{width=0.9\linewidth}
+\begin{tabular}{c@{\hspace{2ex}}l}
+\\[0ex]
+    \ruledef{
+        n_1 \xrightarrow[\hat{c}]{{\bf \_}} \texttt{this}^{\mathtt{M}} \in E
+    }{
+        \texttt{this}^{\mathtt{M}} \in R(\flows) \rulespace \flows \in R^{-1}(\texttt{this}^{\mathtt{M}})
+    }
+    & \hspace{1ex} \rulename{F-Init}
+    \vspace*{2ex}
+    \\
+    
+    \ruledef{
+       n_1 \xrightarrow{\ell} n_2 \in E 
+       \rulespace q_1 \in R^{-1}(n_1) 
+       \rulespace \delta(q_1, \ell) = q_2
+    %   \rulespace q_2 \notin R^{-1}(n_2)
+    } {
+        n_2 \in R(q_2) 
+        \rulespace q_2 \in R^{-1}(n_2)
+    } 
+    & \hspace{1ex} \rulename{F-Propa}
+    \vspace*{2ex}
+    \\
+    
+    
+    \ruledef{
+        n_1 \xrightarrow[\hat{c}]{{\bf \_}} \texttt{this}^{\mathtt{M}} \in E
+        \rulespace \texttt{this}^{\mathtt{M}} \xrightarrow[\check{c}]{{\bf \_}} n_2 \in E
+        \rulespace \iflows \in R^{-1}(\texttt{this}^{\mathtt{M}}) 
+    } {
+        n_1 \xrightarrow{\baltrans} n_2 \in E
+    }
+    & \hspace{1ex} \rulename{F-Sum}
+\end{tabular}
+% \end{adjustbox}
+%\vspace*{-2ex}
+\caption{Rules for conducting \tool over $G = (N, E)$.}
+\label{rule:toolrule}
+%\vspace*{-2ex}
+\end{figure}
+
+%\Cref{eq:S-C3} equivalently.
+
+% For \selconOne, we rely on a simple DFA
+% for accepting \LG. For \selconTwo, we verify the balanced-parentheses property in \LC
+% by using summary edges.
+% For \selconThree (i.e., \Cref{eq:S-C3}),
+% we resort to  .
+
+\begin{thm}
+\label{theorem:precisionpreserving}
+ \kcs{k} (performed in terms of the rules in \Cref{rule:cfapta}) produces exactly the same
+points-to information when performed with  selective context-sensitivity
+under \tool. 
+\end{thm}
+\begin{proof}
+Follows from the facts that 
+(1) \Cref{eqn:cflcscondition} provides a set of necessary conditions for supporting
+selective context-sensitivity,  (2) \LFCR provides a % complete 
+specification 
+of \kcs{k} \hl{with built-in on-the-fly callgraph construction}
+via CFL-reachability,   (3)
+$\LGC\! \supseteq\! \LFC\! \supseteq\! \LFCR$ (\Cref{thm:LRsubsumeLF}),  and (4) \rulename{F-Init}
+has weakened \selconOne by starting 
+from  the
+\texttt{this} variable of every method instead of every object $O$.
+\end{proof}
+
+\begin{comment}
+\begin{theorem} \label{theorem:precisionpreserving}
+Let $\kcs{k}_{pre}$ be the version of \kcs{k}, which analyzes variables/objects in a program that satisfy \Cref{eqn:cflcsconditionFinal} context-sensitively while others context-insensitively. Then $\kcs{k}_{pre}$
+has exactly the same precision as \kcs{k}:  $\cipointstonoarg_{\kcs{k}_{pre}}(v) = \cipointstonoarg_{\kcs{k}}(v)$ for every $v$ in the program.
+\end{theorem}
+\end{comment}
+
+%\paragraph{\bf Time complexity} 
+
+The worst-case time complexity of \tool in analyzing a program on   $G=(N,E)$
+is $O(|E|\times |Q|)$, which is linear to $|E|$, where $|Q|=3$ is  the number of states in our DFA.
+% \label{subsec:complexity}

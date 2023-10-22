@@ -1,0 +1,867 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{65}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{#1}\fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[Andersen(1994)]%
+        {andersen1994program}
+\bibfield{author}{\bibinfo{person}{Lars~Ole Andersen}.}
+  \bibinfo{year}{1994}\natexlab{}.
+\newblock \emph{\bibinfo{title}{Program analysis and specialization for the {C}
+  programming language}}.
+\newblock \bibinfo{thesistype}{Ph.\,D. Dissertation}.
+  \bibinfo{school}{University of Cophenhagen}.
+\newblock
+
+
+\bibitem[Bacon and Sweeney(1996)]%
+        {bacon1996fast}
+\bibfield{author}{\bibinfo{person}{David~F Bacon} {and}
+  \bibinfo{person}{Peter~F Sweeney}.} \bibinfo{year}{1996}\natexlab{}.
+\newblock \showarticletitle{Fast static analysis of C++ virtual function
+  calls}. In \bibinfo{booktitle}{\emph{Proceedings of the 11th ACM SIGPLAN
+  conference on Object-oriented programming, systems, languages, and
+  applications}}. \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{324--341}.
+\newblock
+
+
+\bibitem[Bastani et~al\mbox{.}(2015)]%
+        {Bastani15PLDI}
+\bibfield{author}{\bibinfo{person}{Osbert Bastani}, \bibinfo{person}{Saswat
+  Anand}, {and} \bibinfo{person}{Alex Aiken}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Specification Inference Using Context-Free Language
+  Reachability}. In \bibinfo{booktitle}{\emph{Proceedings of the 42nd Annual
+  ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages}}
+  (Mumbai, India) \emph{(\bibinfo{series}{POPL '15})}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{553–566}.
+\newblock
+\showISBNx{9781450333009}
+\urldef\tempurl%
+\url{https://doi.org/10.1145/2676726.2676977}
+\showDOI{\tempurl}
+
+
+\bibitem[Bodden et~al\mbox{.}(2011)]%
+        {bodden2011taming}
+\bibfield{author}{\bibinfo{person}{Eric Bodden}, \bibinfo{person}{Andreas
+  Sewe}, \bibinfo{person}{Jan Sinschek}, \bibinfo{person}{Hela Oueslati}, {and}
+  \bibinfo{person}{Mira Mezini}.} \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{Taming reflection: Aiding static analysis in the
+  presence of reflection and custom class loaders}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 33rd International Conference on
+  Software Engineering}}. \bibinfo{publisher}{IEEE},
+  \bibinfo{address}{Honolulu, HI, USA}, \bibinfo{pages}{241--250}.
+\newblock
+
+
+\bibitem[Bravenboer and Smaragdakis(2009)]%
+        {bravenboer2009strictly}
+\bibfield{author}{\bibinfo{person}{Martin Bravenboer} {and}
+  \bibinfo{person}{Yannis Smaragdakis}.} \bibinfo{year}{2009}\natexlab{}.
+\newblock \showarticletitle{Strictly declarative specification of sophisticated
+  points-to analyses}. In \bibinfo{booktitle}{\emph{Proceedings of the 24th ACM
+  SIGPLAN conference on Object oriented programming systems languages and
+  applications}}. \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{243--262}.
+\newblock
+
+
+\bibitem[Chatterjee et~al\mbox{.}(2017)]%
+        {chatterjee2017optimal}
+\bibfield{author}{\bibinfo{person}{Krishnendu Chatterjee},
+  \bibinfo{person}{Bhavya Choudhary}, {and} \bibinfo{person}{Andreas
+  Pavlogiannis}.} \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Optimal Dyck reachability for data-dependence and
+  alias analysis}.
+\newblock \bibinfo{journal}{\emph{Proceedings of the ACM on Programming
+  Languages}} \bibinfo{volume}{2}, \bibinfo{number}{POPL}
+  (\bibinfo{year}{2017}), \bibinfo{pages}{1--30}.
+\newblock
+
+
+\bibitem[Chaudhuri(2008)]%
+        {chaudhuri2008subcubic}
+\bibfield{author}{\bibinfo{person}{Swarat Chaudhuri}.}
+  \bibinfo{year}{2008}\natexlab{}.
+\newblock \showarticletitle{Subcubic algorithms for recursive state machines}.
+  In \bibinfo{booktitle}{\emph{Proceedings of the 35th annual ACM
+  SIGPLAN-SIGACT symposium on Principles of programming languages}}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{159--169}.
+\newblock
+
+
+\bibitem[Chen et~al\mbox{.}(2021)]%
+        {chen2021accelerating}
+\bibfield{author}{\bibinfo{person}{Yifan Chen}, \bibinfo{person}{Chenyang
+  Yang}, \bibinfo{person}{Xin Zhang}, \bibinfo{person}{Yingfei Xiong},
+  \bibinfo{person}{Hao Tang}, \bibinfo{person}{Xiaoyin Wang}, {and}
+  \bibinfo{person}{Lu Zhang}.} \bibinfo{year}{2021}\natexlab{}.
+\newblock \showarticletitle{Accelerating Program Analyses in Datalog by Merging
+  Library Facts}. In \bibinfo{booktitle}{\emph{International Static Analysis
+  Symposium}}. \bibinfo{publisher}{Springer International Publishing},
+  \bibinfo{address}{Cham}, \bibinfo{pages}{77--101}.
+\newblock
+
+
+\bibitem[Dean et~al\mbox{.}(1995)]%
+        {dean1995optimization}
+\bibfield{author}{\bibinfo{person}{Jeffrey Dean}, \bibinfo{person}{David
+  Grove}, {and} \bibinfo{person}{Craig Chambers}.}
+  \bibinfo{year}{1995}\natexlab{}.
+\newblock \showarticletitle{Optimization of object-oriented programs using
+  static class hierarchy analysis}. In \bibinfo{booktitle}{\emph{European
+  Conference on Object-Oriented Programming}}. Springer,
+  \bibinfo{publisher}{Springer Berlin Heidelberg}, \bibinfo{address}{Berlin,
+  Heidelberg}, \bibinfo{pages}{77--101}.
+\newblock
+
+
+\bibitem[Englert et~al\mbox{.}(2016)]%
+        {englert2016reachability}
+\bibfield{author}{\bibinfo{person}{Matthias Englert}, \bibinfo{person}{Ranko
+  Lazi\'{c}}, {and} \bibinfo{person}{Patrick Totzke}.}
+  \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Reachability in Two-Dimensional Unary Vector
+  Addition Systems with States is NL-Complete}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 31st Annual ACM/IEEE Symposium
+  on Logic in Computer Science}} \emph{(\bibinfo{series}{LICS '16})}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{477–484}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/2933575.2933577}
+\showDOI{\tempurl}
+
+
+\bibitem[Feng et~al\mbox{.}(2015)]%
+        {feng2015bottom}
+\bibfield{author}{\bibinfo{person}{Yu Feng}, \bibinfo{person}{Xinyu Wang},
+  \bibinfo{person}{Isil Dillig}, {and} \bibinfo{person}{Thomas Dillig}.}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Bottom-up context-sensitive pointer analysis for
+  Java}. In \bibinfo{booktitle}{\emph{Programming Languages and Systems: 13th
+  Asian Symposium, APLAS 2015, Pohang, South Korea, November 30-December 2,
+  2015, Proceedings}}. \bibinfo{publisher}{Springer International Publishing},
+  \bibinfo{address}{Cham}, \bibinfo{pages}{465--484}.
+\newblock
+
+
+\bibitem[Grove and Chambers(2001)]%
+        {grove2001framework}
+\bibfield{author}{\bibinfo{person}{David Grove} {and} \bibinfo{person}{Craig
+  Chambers}.} \bibinfo{year}{2001}\natexlab{}.
+\newblock \showarticletitle{A framework for call graph construction
+  algorithms}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Programming Languages and
+  Systems (TOPLAS)}} \bibinfo{volume}{23}, \bibinfo{number}{6}
+  (\bibinfo{year}{2001}), \bibinfo{pages}{685--746}.
+\newblock
+
+
+\bibitem[Hassanshahi et~al\mbox{.}(2017)]%
+        {hassanshahi2017efficient}
+\bibfield{author}{\bibinfo{person}{Behnaz Hassanshahi},
+  \bibinfo{person}{Raghavendra~Kagalavadi Ramesh}, \bibinfo{person}{Padmanabhan
+  Krishnan}, \bibinfo{person}{Bernhard Scholz}, {and} \bibinfo{person}{Yi Lu}.}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{An Efficient Tunable Selective Points-to Analysis
+  for Large Codebases}. In \bibinfo{booktitle}{\emph{Proceedings of the 6th ACM
+  SIGPLAN International Workshop on State Of the Art in Program Analysis}}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{13–18}.
+\newblock
+
+
+\bibitem[He et~al\mbox{.}(2021c)]%
+        {He2021Turner}
+\bibfield{author}{\bibinfo{person}{Dongjie He}, \bibinfo{person}{Jingbo Lu},
+  \bibinfo{person}{Yaoqing Gao}, {and} \bibinfo{person}{Jingling Xue}.}
+  \bibinfo{year}{2021}\natexlab{c}.
+\newblock \showarticletitle{Accelerating Object-Sensitive Pointer Analysis by
+  Exploiting Object Containment and Reachability}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 35th European Conference on
+  Object-Oriented Programming (ECOOP 2021)}}. \bibinfo{publisher}{Schloss
+  Dagstuhl--Leibniz-Zentrum fuer Informatik}, \bibinfo{address}{Dagstuhl,
+  Germany}, \bibinfo{pages}{18:1--18:31}.
+\newblock
+
+
+\bibitem[He et~al\mbox{.}(2022b)]%
+        {he2022selecting}
+\bibfield{author}{\bibinfo{person}{Dongjie He}, \bibinfo{person}{Jingbo Lu},
+  \bibinfo{person}{Yaoqing Gao}, {and} \bibinfo{person}{Jingling Xue}.}
+  \bibinfo{year}{2022}\natexlab{b}.
+\newblock \showarticletitle{Selecting Context-Sensitivity Modularly for
+  Accelerating Object-Sensitive Pointer Analysis}.
+\newblock \bibinfo{journal}{\emph{IEEE Transactions on Software Engineering}}
+  (\bibinfo{year}{2022}).
+\newblock
+
+
+\bibitem[He et~al\mbox{.}(2021a)]%
+        {he2021context}
+\bibfield{author}{\bibinfo{person}{Dongjie He}, \bibinfo{person}{Jingbo Lu},
+  {and} \bibinfo{person}{Jingling Xue}.} \bibinfo{year}{2021}\natexlab{a}.
+\newblock \showarticletitle{Context Debloating for Object-Sensitive Pointer
+  Analysis}. In \bibinfo{booktitle}{\emph{2021 36th IEEE/ACM International
+  Conference on Automated Software Engineering (ASE)}}.
+  \bibinfo{publisher}{IEEE}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{79--91}.
+\newblock
+
+
+\bibitem[He et~al\mbox{.}(2021b)]%
+        {HeASE21}
+\bibfield{author}{\bibinfo{person}{Dongjie He}, \bibinfo{person}{Jingbo Lu},
+  {and} \bibinfo{person}{Jingling Xue}.} \bibinfo{year}{2021}\natexlab{b}.
+\newblock \showarticletitle{Context Debloating for Object-Sensitive Pointer
+  Analysis}. In \bibinfo{booktitle}{\emph{2021 36th IEEE/ACM International
+  Conference on Automated Software Engineering (ASE)}}.
+  \bibinfo{publisher}{IEEE}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{79--91}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1109/ASE51524.2021.9678880}
+\showDOI{\tempurl}
+
+
+\bibitem[He et~al\mbox{.}(2022a)]%
+        {he_et_al:LIPIcs.ECOOP.2022.30}
+\bibfield{author}{\bibinfo{person}{Dongjie He}, \bibinfo{person}{Jingbo Lu},
+  {and} \bibinfo{person}{Jingling Xue}.} \bibinfo{year}{2022}\natexlab{a}.
+\newblock \showarticletitle{{Qilin: A New Framework For Supporting Fine-Grained
+  Context-Sensitivity in Java Pointer Analysis}}. In
+  \bibinfo{booktitle}{\emph{36th European Conference on Object-Oriented
+  Programming (ECOOP 2022)}} \emph{(\bibinfo{series}{Leibniz International
+  Proceedings in Informatics (LIPIcs)}, Vol.~\bibinfo{volume}{222})},
+  \bibfield{editor}{\bibinfo{person}{Karim Ali} {and} \bibinfo{person}{Jan
+  Vitek}} (Eds.). \bibinfo{publisher}{Schloss Dagstuhl -- Leibniz-Zentrum
+  f{\"u}r Informatik}, \bibinfo{address}{Dagstuhl, Germany},
+  \bibinfo{pages}{30:1--30:29}.
+\newblock
+\showISBNx{978-3-95977-225-9}
+\showISSN{1868-8969}
+\urldef\tempurl%
+\url{https://doi.org/10.4230/LIPIcs.ECOOP.2022.30}
+\showDOI{\tempurl}
+
+
+\bibitem[He et~al\mbox{.}(2023)]%
+        {he2023ifds}
+\bibfield{author}{\bibinfo{person}{Dongjie He}, \bibinfo{person}{Jingbo Lu},
+  {and} \bibinfo{person}{Jingling Xue}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{IFDS-based Context Debloating for Object-Sensitive
+  Pointer Analysis}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Software Engineering and
+  Methodology}} (\bibinfo{year}{2023}).
+\newblock
+
+
+\bibitem[Jeon et~al\mbox{.}(2018)]%
+        {jeon2018precise}
+\bibfield{author}{\bibinfo{person}{Minseok Jeon}, \bibinfo{person}{Sehun
+  Jeong}, {and} \bibinfo{person}{Hakjoo Oh}.} \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{Precise and scalable points-to analysis via
+  data-driven context tunneling}.
+\newblock \bibinfo{journal}{\emph{Proceedings of the ACM on Programming
+  Languages}} \bibinfo{volume}{2}, \bibinfo{number}{OOPSLA}
+  (\bibinfo{year}{2018}), \bibinfo{pages}{1--29}.
+\newblock
+
+
+\bibitem[Jeon and Oh(2022)]%
+        {JeonPOPL22}
+\bibfield{author}{\bibinfo{person}{Minseok Jeon} {and} \bibinfo{person}{Hakjoo
+  Oh}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{Return of CFA: Call-Site Sensitivity Can Be
+  Superior to Object Sensitivity Even for Object-Oriented Programs}.
+\newblock \bibinfo{journal}{\emph{Proc. ACM Program. Lang.}}
+  \bibinfo{volume}{6}, \bibinfo{number}{POPL}, Article \bibinfo{articleno}{58}
+  (\bibinfo{date}{jan} \bibinfo{year}{2022}), \bibinfo{numpages}{29}~pages.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/3498720}
+\showDOI{\tempurl}
+
+
+\bibitem[Jeong et~al\mbox{.}(2017)]%
+        {jeong2017data}
+\bibfield{author}{\bibinfo{person}{Sehun Jeong}, \bibinfo{person}{Minseok
+  Jeon}, \bibinfo{person}{Sungdeok Cha}, {and} \bibinfo{person}{Hakjoo Oh}.}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Data-driven context-sensitivity for points-to
+  analysis}.
+\newblock \bibinfo{journal}{\emph{Proceedings of the ACM on Programming
+  Languages}} \bibinfo{volume}{1}, \bibinfo{number}{OOPSLA}
+  (\bibinfo{year}{2017}), \bibinfo{pages}{100}.
+\newblock
+
+
+\bibitem[Kastrinis and Smaragdakis(2013)]%
+        {kastrinis2013hybrid}
+\bibfield{author}{\bibinfo{person}{George Kastrinis} {and}
+  \bibinfo{person}{Yannis Smaragdakis}.} \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{Hybrid Context-Sensitivity for Points-to Analysis}.
+  In \bibinfo{booktitle}{\emph{Proceedings of the 34th ACM SIGPLAN Conference
+  on Programming Language Design and Implementation}}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{423–434}.
+\newblock
+
+
+\bibitem[Kjelstr\o{}m and Pavlogiannis(2022)]%
+        {kjelstrom2022decidability}
+\bibfield{author}{\bibinfo{person}{Adam~Husted Kjelstr\o{}m} {and}
+  \bibinfo{person}{Andreas Pavlogiannis}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{The Decidability and Complexity of Interleaved
+  Bidirected Dyck Reachability}.
+\newblock \bibinfo{journal}{\emph{Proc. ACM Program. Lang.}}
+  \bibinfo{volume}{6}, \bibinfo{number}{POPL}, Article \bibinfo{articleno}{12}
+  (\bibinfo{date}{jan} \bibinfo{year}{2022}), \bibinfo{numpages}{26}~pages.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/3498673}
+\showDOI{\tempurl}
+
+
+\bibitem[Kodumal and Aiken(2004)]%
+        {kodumal2004set}
+\bibfield{author}{\bibinfo{person}{John Kodumal} {and} \bibinfo{person}{Alex
+  Aiken}.} \bibinfo{year}{2004}\natexlab{}.
+\newblock \showarticletitle{The set constraint/CFL reachability connection in
+  practice}.
+\newblock \bibinfo{journal}{\emph{ACM Sigplan Notices}} \bibinfo{volume}{39},
+  \bibinfo{number}{6} (\bibinfo{year}{2004}), \bibinfo{pages}{207--218}.
+\newblock
+
+
+\bibitem[Kronrod and Faradzev(1970)]%
+        {kronrod1970economic}
+\bibfield{author}{\bibinfo{person}{VL~Arlazarov EA Dinic~MA Kronrod} {and}
+  \bibinfo{person}{IA Faradzev}.} \bibinfo{year}{1970}\natexlab{}.
+\newblock \showarticletitle{On economic construction of the transitive closure
+  of a directred graph}. In \bibinfo{booktitle}{\emph{Dokl. Acad. Nauk SSSR}}.
+  \bibinfo{pages}{487--88}.
+\newblock
+
+
+\bibitem[Latta(1993)]%
+        {Latta1993phdthesis}
+\bibfield{author}{\bibinfo{person}{Michael~John Latta}.}
+  \bibinfo{year}{1993}\natexlab{}.
+\newblock \emph{\bibinfo{title}{The intersection of context-free languages}}.
+\newblock \bibinfo{thesistype}{Ph.\,D. Dissertation}. \bibinfo{address}{USA}.
+\newblock
+\urldef\tempurl%
+\url{https://www.proquest.com/docview/304086568?pq-origsite=gscholar&fromopenview=true}
+\showURL{%
+\tempurl}
+
+
+\bibitem[Lhot{\'a}k and Hendren(2003)]%
+        {lhotak2003scaling}
+\bibfield{author}{\bibinfo{person}{Ond{\v{r}}ej Lhot{\'a}k} {and}
+  \bibinfo{person}{Laurie Hendren}.} \bibinfo{year}{2003}\natexlab{}.
+\newblock \showarticletitle{Scaling {Java} points-to analysis using {Spark}}.
+  In \bibinfo{booktitle}{\emph{International Conference on Compiler
+  Construction}}. \bibinfo{publisher}{Springer Berlin Heidelberg},
+  \bibinfo{address}{Berlin, Heidelberg}, \bibinfo{pages}{153--169}.
+\newblock
+
+
+\bibitem[Lhot{\'a}k and Hendren(2008)]%
+        {lhotak2008evaluating}
+\bibfield{author}{\bibinfo{person}{Ond{\v{r}}ej Lhot{\'a}k} {and}
+  \bibinfo{person}{Laurie Hendren}.} \bibinfo{year}{2008}\natexlab{}.
+\newblock \showarticletitle{Evaluating the benefits of context-sensitive
+  points-to analysis using a BDD-based implementation}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Software Engineering and
+  Methodology (TOSEM)}} \bibinfo{volume}{18}, \bibinfo{number}{1}
+  (\bibinfo{year}{2008}), \bibinfo{pages}{1--53}.
+\newblock
+
+
+\bibitem[Li et~al\mbox{.}(2018)]%
+        {li2018precision}
+\bibfield{author}{\bibinfo{person}{Yue Li}, \bibinfo{person}{Tian Tan},
+  \bibinfo{person}{Anders M{\o}ller}, {and} \bibinfo{person}{Yannis
+  Smaragdakis}.} \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{Precision-guided context sensitivity for pointer
+  analysis}.
+\newblock \bibinfo{journal}{\emph{Proceedings of the ACM on Programming
+  Languages}} \bibinfo{volume}{2}, \bibinfo{number}{OOPSLA}
+  (\bibinfo{year}{2018}), \bibinfo{pages}{1--29}.
+\newblock
+
+
+\bibitem[Li et~al\mbox{.}(2020a)]%
+        {li2020principled}
+\bibfield{author}{\bibinfo{person}{Yue Li}, \bibinfo{person}{Tian Tan},
+  \bibinfo{person}{Anders M{\o}ller}, {and} \bibinfo{person}{Yannis
+  Smaragdakis}.} \bibinfo{year}{2020}\natexlab{a}.
+\newblock \showarticletitle{A Principled Approach to Selective Context
+  Sensitivity for Pointer Analysis}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Programming Languages and
+  Systems}} \bibinfo{volume}{42}, \bibinfo{number}{TOPLAS}
+  (\bibinfo{year}{2020}), \bibinfo{pages}{1--40}.
+\newblock
+
+
+\bibitem[Li et~al\mbox{.}(2020b)]%
+        {li2020fast}
+\bibfield{author}{\bibinfo{person}{Yuanbo Li}, \bibinfo{person}{Qirun Zhang},
+  {and} \bibinfo{person}{Thomas Reps}.} \bibinfo{year}{2020}\natexlab{b}.
+\newblock \showarticletitle{Fast graph simplification for interleaved
+  Dyck-reachability}. In \bibinfo{booktitle}{\emph{Proceedings of the 41st ACM
+  SIGPLAN Conference on Programming Language Design and Implementation}}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{780--793}.
+\newblock
+
+
+\bibitem[Li et~al\mbox{.}(2021)]%
+        {li2021complexity}
+\bibfield{author}{\bibinfo{person}{Yuanbo Li}, \bibinfo{person}{Qirun Zhang},
+  {and} \bibinfo{person}{Thomas Reps}.} \bibinfo{year}{2021}\natexlab{}.
+\newblock \showarticletitle{On the complexity of bidirected interleaved
+  Dyck-reachability}.
+\newblock \bibinfo{journal}{\emph{Proceedings of the ACM on Programming
+  Languages}} \bibinfo{volume}{5}, \bibinfo{number}{POPL}
+  (\bibinfo{year}{2021}), \bibinfo{pages}{1--28}.
+\newblock
+
+
+\bibitem[Liu and Weiner(1973)]%
+        {liu1973infinite}
+\bibfield{author}{\bibinfo{person}{Leonard~Y Liu} {and} \bibinfo{person}{Peter
+  Weiner}.} \bibinfo{year}{1973}\natexlab{}.
+\newblock \showarticletitle{An infinite hierarchy of intersections of
+  context-free languages}.
+\newblock \bibinfo{journal}{\emph{Mathematical systems theory}}
+  \bibinfo{volume}{7} (\bibinfo{year}{1973}), \bibinfo{pages}{185--192}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1007/BF01762237}
+\showDOI{\tempurl}
+
+
+\bibitem[Lu et~al\mbox{.}(2021a)]%
+        {lu2021eagle}
+\bibfield{author}{\bibinfo{person}{Jingbo Lu}, \bibinfo{person}{Dongjie He},
+  {and} \bibinfo{person}{Jingling Xue}.} \bibinfo{year}{2021}\natexlab{a}.
+\newblock \showarticletitle{Eagle: CFL-reachability-based precision-preserving
+  acceleration of object-sensitive pointer analysis with partial context
+  sensitivity}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Software Engineering and
+  Methodology (TOSEM)}} \bibinfo{volume}{30}, \bibinfo{number}{4}
+  (\bibinfo{year}{2021}), \bibinfo{pages}{1--46}.
+\newblock
+
+
+\bibitem[Lu et~al\mbox{.}(2021b)]%
+        {lu2021selective}
+\bibfield{author}{\bibinfo{person}{Jingbo Lu}, \bibinfo{person}{Dongjie He},
+  {and} \bibinfo{person}{Jingling Xue}.} \bibinfo{year}{2021}\natexlab{b}.
+\newblock \showarticletitle{Selective Context-Sensitivity for k-CFA with
+  CFL-Reachability}. In \bibinfo{booktitle}{\emph{International Static Analysis
+  Symposium}}. Springer, \bibinfo{publisher}{Springer International
+  Publishing}, \bibinfo{address}{Cham}, \bibinfo{pages}{261--285}.
+\newblock
+
+
+\bibitem[Lu and Xue(2019)]%
+        {lu2019precision}
+\bibfield{author}{\bibinfo{person}{Jingbo Lu} {and} \bibinfo{person}{Jingling
+  Xue}.} \bibinfo{year}{2019}\natexlab{}.
+\newblock \showarticletitle{Precision-preserving yet fast object-sensitive
+  pointer analysis with partial context sensitivity}.
+\newblock \bibinfo{journal}{\emph{Proceedings of the ACM on Programming
+  Languages}} \bibinfo{volume}{3}, \bibinfo{number}{OOPSLA}
+  (\bibinfo{year}{2019}), \bibinfo{pages}{1--29}.
+\newblock
+
+
+\bibitem[Melski and Reps(2000)]%
+        {melski2000interconvertibility}
+\bibfield{author}{\bibinfo{person}{David Melski} {and} \bibinfo{person}{Thomas
+  Reps}.} \bibinfo{year}{2000}\natexlab{}.
+\newblock \showarticletitle{Interconvertibility of a class of set constraints
+  and context-free-language reachability}.
+\newblock \bibinfo{journal}{\emph{Theoretical Computer Science}}
+  \bibinfo{volume}{248}, \bibinfo{number}{1-2} (\bibinfo{year}{2000}),
+  \bibinfo{pages}{29--98}.
+\newblock
+
+
+\bibitem[Milanova(2020)]%
+        {milanova2020flowcfl}
+\bibfield{author}{\bibinfo{person}{Ana Milanova}.}
+  \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{FlowCFL: generalized type-based reachability
+  analysis: graph reduction and equivalence of CFL-based and type-based
+  reachability}.
+\newblock \bibinfo{journal}{\emph{Proceedings of the ACM on Programming
+  Languages}} \bibinfo{volume}{4}, \bibinfo{number}{OOPSLA}
+  (\bibinfo{year}{2020}), \bibinfo{pages}{1--29}.
+\newblock
+
+
+\bibitem[Milanova et~al\mbox{.}(2002)]%
+        {milanova2002parameterized}
+\bibfield{author}{\bibinfo{person}{Ana Milanova}, \bibinfo{person}{Atanas
+  Rountev}, {and} \bibinfo{person}{Barbara~G Ryder}.}
+  \bibinfo{year}{2002}\natexlab{}.
+\newblock \showarticletitle{Parameterized object sensitivity for points-to and
+  side-effect analyses for {Java}}. In \bibinfo{booktitle}{\emph{Proceedings of
+  the 2002 ACM SIGSOFT international symposium on Software testing and
+  analysis}}. \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{1--11}.
+\newblock
+
+
+\bibitem[Milanova et~al\mbox{.}(2005)]%
+        {milanova2005parameterized}
+\bibfield{author}{\bibinfo{person}{Ana Milanova}, \bibinfo{person}{Atanas
+  Rountev}, {and} \bibinfo{person}{Barbara~G Ryder}.}
+  \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{Parameterized object sensitivity for points-to
+  analysis for {Java}}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Software Engineering and
+  Methodology}} \bibinfo{volume}{14}, \bibinfo{number}{1}
+  (\bibinfo{year}{2005}), \bibinfo{pages}{1--41}.
+\newblock
+
+
+\bibitem[Naik et~al\mbox{.}(2006)]%
+        {naik2006effective}
+\bibfield{author}{\bibinfo{person}{Mayur Naik}, \bibinfo{person}{Alex Aiken},
+  {and} \bibinfo{person}{John Whaley}.} \bibinfo{year}{2006}\natexlab{}.
+\newblock \showarticletitle{Effective static race detection for {Java}}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 27th ACM SIGPLAN Conference on
+  Programming Language Design and Implementation}}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{308--319}.
+\newblock
+
+
+\bibitem[Pratikakis et~al\mbox{.}(2006)]%
+        {pratikakis2006existential}
+\bibfield{author}{\bibinfo{person}{Polyvios Pratikakis},
+  \bibinfo{person}{Jeffrey~S Foster}, {and} \bibinfo{person}{Michael Hicks}.}
+  \bibinfo{year}{2006}\natexlab{}.
+\newblock \showarticletitle{Existential label flow inference via CFL
+  reachability}. In \bibinfo{booktitle}{\emph{International Static Analysis
+  Symposium}}. Springer, \bibinfo{publisher}{Springer Berlin Heidelberg},
+  \bibinfo{address}{Berlin, Heidelberg}, \bibinfo{pages}{88--106}.
+\newblock
+
+
+\bibitem[Raghothaman et~al\mbox{.}(2018)]%
+        {raghothaman2018user}
+\bibfield{author}{\bibinfo{person}{Mukund Raghothaman},
+  \bibinfo{person}{Sulekha Kulkarni}, \bibinfo{person}{Kihong Heo}, {and}
+  \bibinfo{person}{Mayur Naik}.} \bibinfo{year}{2018}\natexlab{}.
+\newblock \showarticletitle{User-guided program reasoning using Bayesian
+  inference}. In \bibinfo{booktitle}{\emph{Proceedings of the 39th ACM SIGPLAN
+  Conference on Programming Language Design and Implementation}}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{722--735}.
+\newblock
+
+
+\bibitem[Rehof and F{\"a}hndrich(2001)]%
+        {rehof2001type}
+\bibfield{author}{\bibinfo{person}{Jakob Rehof} {and} \bibinfo{person}{Manuel
+  F{\"a}hndrich}.} \bibinfo{year}{2001}\natexlab{}.
+\newblock \showarticletitle{Type-based flow analysis: from polymorphic
+  subtyping to CFL-reachability}.
+\newblock \bibinfo{journal}{\emph{ACM SIGPLAN Notices}} \bibinfo{volume}{36},
+  \bibinfo{number}{3} (\bibinfo{year}{2001}), \bibinfo{pages}{54--66}.
+\newblock
+
+
+\bibitem[Reps(1998)]%
+        {reps1998program}
+\bibfield{author}{\bibinfo{person}{Thomas Reps}.}
+  \bibinfo{year}{1998}\natexlab{}.
+\newblock \showarticletitle{Program analysis via graph reachability}.
+\newblock \bibinfo{journal}{\emph{Information and software technology}}
+  \bibinfo{volume}{40}, \bibinfo{number}{11-12} (\bibinfo{year}{1998}),
+  \bibinfo{pages}{701--726}.
+\newblock
+
+
+\bibitem[Reps(2000)]%
+        {reps2000undecidability}
+\bibfield{author}{\bibinfo{person}{Thomas Reps}.}
+  \bibinfo{year}{2000}\natexlab{}.
+\newblock \showarticletitle{Undecidability of context-sensitive data-dependence
+  analysis}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Programming Languages and
+  Systems}} \bibinfo{volume}{22}, \bibinfo{number}{1} (\bibinfo{year}{2000}),
+  \bibinfo{pages}{162--186}.
+\newblock
+
+
+\bibitem[Reps et~al\mbox{.}(1995)]%
+        {reps1995precise}
+\bibfield{author}{\bibinfo{person}{Thomas Reps}, \bibinfo{person}{Susan
+  Horwitz}, {and} \bibinfo{person}{Mooly Sagiv}.}
+  \bibinfo{year}{1995}\natexlab{}.
+\newblock \showarticletitle{Precise interprocedural dataflow analysis via graph
+  reachability}. In \bibinfo{booktitle}{\emph{Proceedings of the 22nd ACM
+  SIGPLAN-SIGACT symposium on Principles of programming languages}}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{49--61}.
+\newblock
+
+
+\bibitem[Ryder(2003)]%
+        {ryder2003dimensions}
+\bibfield{author}{\bibinfo{person}{Barbara~G Ryder}.}
+  \bibinfo{year}{2003}\natexlab{}.
+\newblock \showarticletitle{Dimensions of precision in reference analysis of
+  object-oriented programming languages}. In
+  \bibinfo{booktitle}{\emph{International Conference on Compiler
+  Construction}}. Springer, \bibinfo{publisher}{Springer Berlin Heidelberg},
+  \bibinfo{address}{Berlin, Heidelberg}, \bibinfo{pages}{126--137}.
+\newblock
+
+
+\bibitem[Shang et~al\mbox{.}(2012)]%
+        {shang2012demand}
+\bibfield{author}{\bibinfo{person}{Lei Shang}, \bibinfo{person}{Xinwei Xie},
+  {and} \bibinfo{person}{Jingling Xue}.} \bibinfo{year}{2012}\natexlab{}.
+\newblock \showarticletitle{On-demand dynamic summary-based points-to
+  analysis}. In \bibinfo{booktitle}{\emph{Proceedings of the Tenth
+  International Symposium on Code Generation and Optimization}}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{264--274}.
+\newblock
+
+
+\bibitem[Shivers(1991)]%
+        {shivers1991control}
+\bibfield{author}{\bibinfo{person}{Olin~Grigsby Shivers}.}
+  \bibinfo{year}{1991}\natexlab{}.
+\newblock \emph{\bibinfo{title}{Control-flow analysis of higher-order languages
+  or taming lambda}}.
+\newblock \bibinfo{thesistype}{Ph.\,D. Dissertation}. \bibinfo{school}{Carnegie
+  Mellon University}.
+\newblock
+\newblock
+\shownote{CMU-CS-91-145}.
+
+
+\bibitem[Smaragdakis et~al\mbox{.}(2011)]%
+        {smaragdakis2011pick}
+\bibfield{author}{\bibinfo{person}{Yannis Smaragdakis}, \bibinfo{person}{Martin
+  Bravenboer}, {and} \bibinfo{person}{Ondrej Lhot{\'a}k}.}
+  \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{Pick your contexts well: understanding
+  object-sensitivity}. In \bibinfo{booktitle}{\emph{Proceedings of the 38th
+  annual ACM SIGPLAN-SIGACT symposium on Principles of programming languages}}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{17--30}.
+\newblock
+
+
+\bibitem[Sridharan(2007)]%
+        {sridharan2007refinement}
+\bibfield{author}{\bibinfo{person}{Manu Sridharan}.}
+  \bibinfo{year}{2007}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Refinement-based program analysis tools}}.
+\newblock \bibinfo{publisher}{University of California, Berkeley}.
+\newblock
+
+
+\bibitem[Sridharan and Bod\'{\i}k(2006)]%
+        {sridharan2006refinement}
+\bibfield{author}{\bibinfo{person}{Manu Sridharan} {and}
+  \bibinfo{person}{Rastislav Bod\'{\i}k}.} \bibinfo{year}{2006}\natexlab{}.
+\newblock \showarticletitle{Refinement-Based Context-Sensitive Points-to
+  Analysis for {Java}}. In \bibinfo{booktitle}{\emph{Proceedings of the 27th
+  ACM SIGPLAN Conference on Programming Language Design and Implementation}}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{387–400}.
+\newblock
+
+
+\bibitem[Sridharan et~al\mbox{.}(2005)]%
+        {sridharan2005demand}
+\bibfield{author}{\bibinfo{person}{Manu Sridharan}, \bibinfo{person}{Denis
+  Gopan}, \bibinfo{person}{Lexin Shan}, {and} \bibinfo{person}{Rastislav
+  Bod\'{\i}k}.} \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{Demand-Driven Points-to Analysis for {Java}}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 20th Annual ACM SIGPLAN
+  Conference on Object-Oriented Programming, Systems, Languages, and
+  Applications}}. \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{59–76}.
+\newblock
+
+
+\bibitem[Sundaresan et~al\mbox{.}(2000)]%
+        {sundaresan2000practical}
+\bibfield{author}{\bibinfo{person}{Vijay Sundaresan}, \bibinfo{person}{Laurie
+  Hendren}, \bibinfo{person}{Chrislain Razafimahefa}, \bibinfo{person}{Raja
+  Vall{\'e}e-Rai}, \bibinfo{person}{Patrick Lam}, \bibinfo{person}{Etienne
+  Gagnon}, {and} \bibinfo{person}{Charles Godin}.}
+  \bibinfo{year}{2000}\natexlab{}.
+\newblock \showarticletitle{Practical virtual method call resolution for Java}.
+\newblock \bibinfo{journal}{\emph{ACM SIGPLAN Notices}} \bibinfo{volume}{35},
+  \bibinfo{number}{10} (\bibinfo{year}{2000}), \bibinfo{pages}{264--280}.
+\newblock
+
+
+\bibitem[{T. Tan, Y. Li and J. Xue}(2017)]%
+        {tan2017efficient}
+\bibfield{author}{\bibinfo{person}{{T. Tan, Y. Li and J. Xue}}.}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{{Efficient and precise points-to analysis: modeling
+  the heap by merging equivalent automata}}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 38th ACM SIGPLAN Conference on
+  Programming Language Design and Implementation}}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{278--291}.
+\newblock
+
+
+\bibitem[Tang et~al\mbox{.}(2015)]%
+        {tang2015summary}
+\bibfield{author}{\bibinfo{person}{Hao Tang}, \bibinfo{person}{Xiaoyin Wang},
+  \bibinfo{person}{Lingming Zhang}, \bibinfo{person}{Bing Xie},
+  \bibinfo{person}{Lu Zhang}, {and} \bibinfo{person}{Hong Mei}.}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Summary-based context-sensitive data-dependence
+  analysis in presence of callbacks}. In \bibinfo{booktitle}{\emph{Proceedings
+  of the 42Nd Annual ACM SIGPLAN-SIGACT Symposium on Principles of Programming
+  Languages}}. \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{83--95}.
+\newblock
+
+
+\bibitem[Thiessen and Lhot\'{a}k(2017)]%
+        {thiessen2017context}
+\bibfield{author}{\bibinfo{person}{Rei Thiessen} {and}
+  \bibinfo{person}{Ond\v{r}ej Lhot\'{a}k}.} \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Context Transformations for Pointer Analysis}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 38th ACM SIGPLAN Conference on
+  Programming Language Design and Implementation}}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{263–277}.
+\newblock
+
+
+\bibitem[Vall{\'e}e-Rai et~al\mbox{.}(2010)]%
+        {vallee2010soot}
+\bibfield{author}{\bibinfo{person}{Raja Vall{\'e}e-Rai}, \bibinfo{person}{Phong
+  Co}, \bibinfo{person}{Etienne Gagnon}, \bibinfo{person}{Laurie Hendren},
+  \bibinfo{person}{Patrick Lam}, {and} \bibinfo{person}{Vijay Sundaresan}.}
+  \bibinfo{year}{2010}\natexlab{}.
+\newblock \showarticletitle{Soot: A {Java} bytecode optimization framework}.
+\newblock In \bibinfo{booktitle}{\emph{CASCON First Decade High Impact
+  Papers}}. \bibinfo{publisher}{IBM Corp.}, \bibinfo{address}{USA},
+  \bibinfo{pages}{214--224}.
+\newblock
+
+
+\bibitem[{WALA}(2022)]%
+        {WALA2022}
+\bibfield{author}{\bibinfo{person}{{WALA}}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \bibinfo{title}{{WALA: T.J. Watson Libraries for Analysis}}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{http://wala.sourceforge.net/}
+\showURL{%
+Retrieved April 14, 2022 from \tempurl}
+
+
+\bibitem[Xu et~al\mbox{.}(2009)]%
+        {xu2009scaling}
+\bibfield{author}{\bibinfo{person}{Guoqing Xu}, \bibinfo{person}{Atanas
+  Rountev}, {and} \bibinfo{person}{Manu Sridharan}.}
+  \bibinfo{year}{2009}\natexlab{}.
+\newblock \showarticletitle{Scaling CFL-reachability-based points-to analysis
+  using context-sensitive must-not-alias analysis}. In
+  \bibinfo{booktitle}{\emph{European Conference on Object-Oriented
+  Programming}}. Springer, \bibinfo{publisher}{Springer Berlin Heidelberg},
+  \bibinfo{address}{Berlin, Heidelberg}, \bibinfo{pages}{98--122}.
+\newblock
+
+
+\bibitem[Yan et~al\mbox{.}(2011)]%
+        {yan2011demand}
+\bibfield{author}{\bibinfo{person}{Dacong Yan}, \bibinfo{person}{Guoqing Xu},
+  {and} \bibinfo{person}{Atanas Rountev}.} \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{Demand-driven context-sensitive alias analysis for
+  Java}. In \bibinfo{booktitle}{\emph{Proceedings of the 2011 International
+  Symposium on Software Testing and Analysis}}. \bibinfo{publisher}{Association
+  for Computing Machinery}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{155--165}.
+\newblock
+
+
+\bibitem[Zhang et~al\mbox{.}(2013)]%
+        {zhang2013fast}
+\bibfield{author}{\bibinfo{person}{Qirun Zhang}, \bibinfo{person}{Michael~R
+  Lyu}, \bibinfo{person}{Hao Yuan}, {and} \bibinfo{person}{Zhendong Su}.}
+  \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{Fast algorithms for Dyck-CFL-reachability with
+  applications to alias analysis}. In \bibinfo{booktitle}{\emph{Proceedings of
+  the 34th ACM SIGPLAN Conference on Programming Language Design and
+  Implementation}}. \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{435--446}.
+\newblock
+
+
+\bibitem[Zheng and Rugina(2008)]%
+        {zheng2008demand}
+\bibfield{author}{\bibinfo{person}{Xin Zheng} {and} \bibinfo{person}{Radu
+  Rugina}.} \bibinfo{year}{2008}\natexlab{}.
+\newblock \showarticletitle{Demand-driven alias analysis for C}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 35th annual ACM SIGPLAN-SIGACT
+  symposium on Principles of programming languages}}.
+  \bibinfo{publisher}{Association for Computing Machinery},
+  \bibinfo{address}{New York, NY, USA}, \bibinfo{pages}{197--208}.
+\newblock
+
+
+\end{thebibliography}
